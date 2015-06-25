@@ -1,0 +1,150 @@
+<html>
+  <head>
+    <title>
+      Consider Using Collection Functions
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../site.css" type="text/css" media="screen" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>
+    <link href="../rainbow-style.css" rel="stylesheet" type="text/css"/>
+    
+    <script src="../rainbow-custom.min.js"></script>
+  </head>
+  <body>
+    <header>Pseudo Ramble</header>
+    
+    <div id="main">
+      <article>
+        <div class="article-header">
+          Consider Using Collection Functions
+        </div>
+        I thought these functions were well known. I see them used incorrectly in code I read, which I found sorta surprising. I encourage folks to look into the collection utilities their language provides.
+           <br/>
+           <br/>
+           Here's a pretty typical example (Javascript):<br /><br />
+           <pre><code data-language="javascript">var alphabet = ["a", "b", "c", "d", "e"];
+var capitalized = [];
+for (var i = 0; i &lt; alphabet.length; i++) {
+  var upperCaseLetter = alphabet[i].toUpperCase();
+  capitalized.push(upperCaseLetter);
+}
+console.warn(capitalized);</code></pre>
+           This takes each element in the array, assumes a function called toUpperCase() exists on each element in the array, and pushes the value into a new array.
+           <br/>
+           <br/>
+           There's anything wrong with this (in the what &amp; how it's doing it sense; I could've made a mistake) but there is a nicer way to generate this using Javascript:
+           <br/>
+           <br/>
+           <pre><code data-language="javascript">var alphabet = ["a", "b", "c", "d", "e"];
+var capitalized = alphabet.map(function(letter) {
+  return letter.toUpperCase();
+});
+console.warn(capitalized);</code></pre>
+           <span style="font-family: monospace">
+             map()
+           </span>
+           takes a function as its argument, which is used to generate new values.
+           <span style="font-family: monospace">
+             map()
+           </span>
+           then iterates across each element in the list, executes the given function, and adds the returned value into a new array.
+           <br/>
+           <br/>
+           In other words, it does what the first snippet did before, but gets rid of the manual tracking and tediousness for you. Great right?
+           <br/>
+           <br/>
+           When using these functions, you've gotta make a concerted effort to dump your old habits. They do
+           <i>
+             sort of
+           </i>
+           look like typical loops in some cases. Here's a this-works-but-is-completely-missing-the-point example using the
+           <span style="font-family:monospace">
+             some()
+           </span>
+           function:
+           <br/>
+           <br/>
+           <pre><code data-language="javascript">var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+var hasBigNumbers = false;
+numbers.some(function(number) {
+  var result = number &gt; 9;
+  if (result) {
+    hasBigNumbers = result;
+    return true;
+  }
+});
+console.warn(hasBigNumbers);</code></pre>
+           The intent of
+           <span style="font-family:monospace">
+             some()
+           </span>
+           is to find out if
+           <i>
+             any
+           </i>
+           element in a collection can be evaulated to true. The result of some is a boolean indicating whether the predicate was true for one or 
+           more values within the collection. Its usage above tries to use it like a short-circuiting loop. While it exhibits this behavior, it's only by coincidence. It could be implemented other ways and still be correct.
+           <br/>
+           <br/>
+           A better way to use
+           <span style="font-family:monospace">
+             some()
+           </span>
+           may look like this:<br /><br />
+           <pre><code data-language="javascript">var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+var hasBigNumbers = numbers.some(function(number) {
+  return number &gt; 9;
+});
+console.warn(hasBigNumbers);</code></pre>
+           This has the same effect as the first version with
+           <span style="font-family:monospace">
+             some()
+           </span>
+           but in a lot less words, and a lot less mechanics.
+           <br/>
+           <br/>
+           One handy thing is you can chain these kinds of calls together in some scenarios. Here's a modified example of some code I was working on a while back for part of this site:
+           <br/>
+           <br/>
+           <pre><code data-language="javascript">var entries = lookup_entries();
+var matching_entries = entries.map(function(entry) {
+  return {
+    title : entry.title,
+    score : determine_score(entry);
+  };
+}).filter(function(entry) {
+  return entry.score &gt; 0;
+});</code></pre>
+           Once again we see
+           <span style="font-family:monospace">
+             map()
+           </span>
+           in action, but we also see another function
+           <span style="font-family:monospace">
+             filter()
+           </span>
+           .
+           <span style="font-family:monospace">
+             filter()
+           </span>
+           takes each element, and determines if it should be "accepted" (the function evaulates to true) or "rejected" (the function evaluates to false). The net result of filter is a new array where all of the "accepted" values are held, but the "rejected" ones are not.
+           <br/>
+           <br/>
+           I sorta like how it looks. It seems like others don't. I dunno - whatever floats your boat.
+           <br/>
+           <br/>
+           More importantly, it seems like others want to use them but are using them incorrectly. I think you should use them without a doubt. If you are though, try and use them correctly.
+      </article>
+      
+      <nav>
+        <span class="other-entries-title">Other Entries</span>
+        <ul id="previous-entries-list" class="previous-entries">
+          <li><a href="homemade-crunchwraps-a-tutorial.html">Homemade Crunchwraps - A Tutorial</a></li>
+          <li><a href="diagonol-yer-cube.html">I'll Diagonol Yer Cube</a></li>
+          <li><a href="workbench-setup-part-1.html">Workbench Setup - Part 1</a></li>
+        </ul>
+      </nav>
+    </div>
+ </body>
+</html>

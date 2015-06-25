@@ -1,0 +1,128 @@
+<html>
+  <head>
+    <title>I'll Diagonal Yer Cube!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../site.css" type="text/css" media="screen" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>
+    <link href="../rainbow-style.css" rel="stylesheet" type="text/css"/>
+    
+    <script src="../rainbow-custom.min.js"></script>
+  </head>
+  <body>
+   <header>Pseudo Ramble</header>
+    
+    <div id="main">
+      <article>
+        <div class="article-header">I'll Diagonol Yer Cube</div>
+        <span class="small">
+          Disclaimer - I take no responsibility for any mistakes, inaccuracies, or made up nonsense in the following entry. If you decide to follow this and think it makes sense and it turns out it doesn't, I'm sorry.
+        </span>
+        <br/>
+        <br/>
+        Here's something that bugged me the other day. I was reading through my old calculus textbook the other day (the kind with the answers to odd problems in the back, but zero explanation. Great). The problem goes:
+        <br/>
+        <span class="quotation">
+          Express the edge length of a cube as a function of the cube's diagonal length d.
+        </span>
+        <span class="label">
+          The short answer:
+        </span><br /><br />
+        <pre>d / sqrt(3)</pre>
+        where d is the diagonal length of the cube. Hooray.
+        <br/>
+        <br/>
+        <span class="label">
+          The key to getting this problem right is understanding two things:
+        </span>
+        <ol>
+          <li>
+            What is the cube's diagonal?
+             </li>
+          <li>
+            How do I determine what the cube's diagonal length is?
+          </li>
+        </ol>
+        <span class="label">
+          The longer answer (first question):
+        </span>
+        The diagonal of the cube described is the length from one corner of the cube to the other end of the cube, if a straight line was drawn between the two. Another way to think about this is that the diagonal of a cube is the hypotenuse of the "face" of a cube that runs diagonally through the center of the cube. This may not help, but the pictures and explanations later on may help.
+        <br/>
+        <br/>
+        <span class="label">
+          The longer answer (second question):
+        </span>
+        First, lets start by finding the diagonal of a simple square. If we remember Pythagorean's Therom, you can determine the length of a diagonal with the form:<br /><br />
+        <pre>a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup></pre>
+        where a &amp; b are two sides of a triangle, and c
+        <sub>
+          1
+        </sub>
+        is the hypotenuse of the triangle. Remember also that you can split a rectangle into a triangle by drawing an imaginary line diagonally across it. Also remember that the edges of a square are all equal. In other words, in our problem, a = b.
+        <br/>
+        <br/>
+        <img class="centered" src="../images/my_drawings/a_square.png"/>
+        <span class="quotation centered">
+          A sample square with a line drawn diagonally
+        </span>
+        The resulting form for finding this diagonal is:<br /><br />
+        <pre>
+   c<sub>1</sub><sup>2</sup> = a<sup>2</sup> + a<sup>2</sup>
+       = 2a<sup>2</sup>
+ =&gt; c<sub>1</sub> = sqrt(2a<sup>2</sup>)
+       = sqrt(2) * a
+        </pre>
+        In other words, because each side is the same, you end up with the constant sqrt(2) (two sides that are the same). This allows you to get the diagonal of a square by simply knowing one side.
+        <br/>
+        <br/>
+        Now, what does this give us for figuring out the diagonal of the cube. What we did above, in respect to a cube, is figured out the diagonal length of one of the faces of the cube. I drew it a few times, and realized you could think of it as the length of an imaginary face that runs through the cube. I attempted to draw this like so:
+        <br/>
+        <br/>
+        <img class="centered" src="../images/my_drawings/a_cube.png"/>
+        <span class="quotation centered">
+          An attempt at showing the imaginary inner-face of a cube
+        </span>
+        Imagine that the cube has been cut in half diagonally, and you laid clear plastic wrap across the top of it. The gray walls are the back of the cube. We're trying to find the diagonal length of the plastic wrap we added to the top of this. In other words, we want to figure out what c
+        <sub>
+          2
+        </sub>
+        (the orange dashed line in the image) is. And you'll notice that now we know two pieces of info - What a is, and what c
+        <sub>
+          1
+        </sub>
+        is (from the previous part of the problem).
+        Now that we have a visual that (hopefully might possible (but probably doesn't)) make sense, we can algebra at it a bit to find the solution:<br /><br />
+        <pre>
+Recall that: c<sub>1</sub><sup>2</sup> = 2a<sup>2</sup>
+  c<sub>2</sub><sup>2</sup> = a<sup>2</sup> + c<sub>1</sub><sup>2</sup>
+      = a<sup>2</sup> + 2a<sup>2</sup>
+      = 3a<sup>2</sup>
+=&gt; c<sub>2</sub> = sqrt(3a<sup>2</sup>)
+      = sqrt(3) * a
+=&gt;  a = c<sub>2</sub> / sqrt(3)
+        </pre>
+        So there you have it. To find a diagonal of a cube with sides of length a, multiply a by the square root of 3. If you happen to know the diagonal length and need to find an edge length, divide the edge length by the square root of 3. I double checked this value by looking at the
+        <a href="https://en.wikipedia.org/wiki/Space_diagonal">
+          'space diagonal'
+        </a>
+        on
+        <a href="https://en.wikipedia.org/wiki/Cube">
+          the Wikipedia page on cubes
+        </a>
+        .
+        <br/>
+        <br/>
+        But don't worry kids, if you don't happen to realize any of this, you'll just get the problem wrong with no good explanation. This kind of stuff becomes a lot more enjoyable when there's no pressure of time or grades. :)
+      </article>
+      
+      <nav>
+        <span class="other-entries-title">Other Entries</span>
+        <ul id="previous-entries-list" class="previous-entries">
+          <li><a href="consider-using-collection-functions.html">Consider Using Collection Functions</a></li>
+          <li><a href="workbench-setup-part-1.html">Workbench Setup - Part 1</a></li>
+          <li><a href="homemade-crunchwraps-a-tutorial.html">Homemade Crunchwraps - A Tutorial</a></li>
+        </ul>
+      </nav>
+    </div>
+ </body>
+</html>

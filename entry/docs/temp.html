@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>temp.html<docs></title>
+
+</head>
+
+<body>
+
+<div class="article-header">How I Run This Blog</div>
+
+<p>As I write this, I'm currently creating the code to operate this blog. These are essentially my notes, a new entry, and a neat outline of things I'm creating.</p>
+
+<p>This blog has a few simple strategies:</p>
+
+<ul>
+<li>None of this content needs to be dynamically generated at run-time</li>
+<li>Almost none of this content needs JS</li>
+<li>I want to be able to start writing, previewing, publishing, and sharing new entries without much thought</li>
+</ul>
+
+<p>With that in mind, my system is fairly simple:</p>
+
+<ul>
+<li>Emacs - Write the entries, issue the commands.</li>
+<li>Python - Configures markup as needed (BeautifulSoup).</li>
+<li>Markdown - Used to write articles themselves.</li>
+<li>Apache - Hosts actual content (on DigitalOcean).</li>
+</ul>
+
+<h2>Emacs</h2>
+
+<p>My Emacs code consists of a few small functions:</p>
+
+<ul>
+<li><em>'blog-new-entry</em></li>
+<li><em>'blog-gen-entry</em></li>
+<li><em>'blog-publish-entry</em></li>
+<li><em>'blog-socialize-entry</em></li>
+</ul>
+
+<h3>'blog-new-entry</h3>
+
+<p>'blog-new-entry visits a new file, given the name of the filename to use. It then switches the current window to the newly created buffer, and sets it as the current buffer. It does not save the current buffer by default.</p>
+
+<ul>
+<li>I write my filenames in-this-form.</li>
+<li>The directory where entries are stored is under the <em>blog-entry-dir</em> binding.</li>
+<li>The filetype used for new entries is stored under the <em>blog-file-type</em> binding.</li>
+</ul>
+
+<p><em>Example</em>: Suppose then I did the following:</p>
+
+<p><code>M-x blog-new-entry &lt;RET&gt; test-entry</code>.</p>
+
+<p>I have <em>blog-file-type</em> set to ".md" and <em>blog-entry-dir</em> set to <code>~/blog/entries/</code>. The created entry would look something like <code>~/blog/entries/test-entry.md</code> and would be ready for editing.</p>
+
+<h3>'blog-gen-entry ###x</h3>
+
+<p><em>'blog-gen-entry</em> takes what content has been created so far and smashes it into its HTML form. We do roughly the following:</p>
+
+<ul>
+<li>Generate Markdown output</li>
+<li>Place output into new template copy</li>
+<li>Do any markup changes needed</li>
+</ul>
+
+<p>We're issuing <code>M-x markdown-export 'temp.html'</code> to get the initial entry. We then use Python and BS4 to smush it together to make it look like a reasonable entry. See the Python section for more details.</p>
+
+<h3>'blog-publish-entry</h3>
+
+<p><em>'blog-publish-entry</em> is what we'll use to take the generated &amp; formatted markup, push it into version control, and finally do any last things we need to do to get it on our web server.</p>
+
+</body>
+</html>
