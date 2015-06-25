@@ -1,10 +1,6 @@
-Blog Revamp
-==============
+PseudoRamble.com
+========================
 
-Basic features to start off with:
+This is the creation of my new site and blog and whatnot. Here I'll host the entries and some of the tooling I use to create and maintain this site.
 
-* Create initial entry files.
-* Load up emacs to the newly created file.
-* Load up a browser (Firefox?) to the newly created file.
-* Once editing is finished, link up the pages & build the index as needed.
-* Push to BitBucket & Website.
+No, I don't accept pull requests here :)
