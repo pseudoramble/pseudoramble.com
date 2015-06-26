@@ -137,7 +137,7 @@
      and would be ready for editing.
     </p>
     <h3>
-     'blog-gen-entry ###x
+     'blog-gen-entry
     </h3>
     <p>
      <em>
@@ -171,6 +171,26 @@
       'blog-publish-entry
      </em>
      is what we'll use to take the generated &amp; formatted markup, push it into version control, and finally do any last things we need to do to get it on our web server.
+    </p>
+    <h2>
+     Python
+    </h2>
+    <p>
+     To supplement the creation of the markup, I'm using Python &amp; BeautifulSoup. Emacs issues out a call with the following inputs to the file:
+    </p>
+    <ul>
+     <li>
+      input_filename - The (absolute) name of the file containing the generated markup
+     </li>
+     <li>
+      output_filename - The (absolute) name of the file where the updated markup will be stored
+     </li>
+     <li>
+      template_filename - The (absolute) name of the file where we'll put generated markup into
+     </li>
+    </ul>
+    <p>
+     There may be a way to handle this portion via Emacs. For now though, it seemed simple enough to try it this way. I may modify it later, but for the time being this was the easiest way forward. It seems to work fine too.
     </p>
    </article>
    <nav>
