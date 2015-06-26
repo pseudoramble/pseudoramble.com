@@ -80,9 +80,9 @@
       </em>
      </li>
     </ul>
-    <h3>
+    <h4>
      'blog-new-entry
-    </h3>
+    </h4>
     <p>
      'blog-new-entry visits a new file, given the name of the filename to use. It then switches the current window to the newly created buffer, and sets it as the current buffer. It does not save the current buffer by default.
     </p>
@@ -136,9 +136,9 @@
      </code>
      and would be ready for editing.
     </p>
-    <h3>
+    <h4>
      'blog-gen-entry
-    </h3>
+    </h4>
     <p>
      <em>
       'blog-gen-entry
@@ -161,11 +161,11 @@
      <code>
       M-x markdown-export 'temp.html'
      </code>
-     to get the initial entry. We then use Python and BS4 to smush it together to make it look like a reasonable entry. See the Python section for more details.
+     to get the initial entry. We then use Python and BS4 to smash it together to make it look like a reasonable entry. See the Python section for more details.
     </p>
-    <h3>
+    <h4>
      'blog-publish-entry
-    </h3>
+    </h4>
     <p>
      <em>
       'blog-publish-entry
@@ -191,6 +191,12 @@
     <p>
      We'll also have a post-commit hook in git to handle pushing/syncing up GitHub and the webserver.
     </p>
+    <h4>
+     'blog-socialize-entry
+    </h4>
+    <p>
+     I haven't quite figured out how I want to do this yet. More to come when I figure it out.
+    </p>
     <h2>
      Python
     </h2>
@@ -208,6 +214,9 @@
       template_filename - The (absolute) name of the file where we'll put generated markup into
      </li>
     </ul>
+    <p>
+     From here, the script wraps the generated markup in the specified template, and fills in the "Other Entries" list. This is then dumped to the output_filename given.
+    </p>
     <p>
      There may be a way to handle this portion via Emacs. For now though, it seemed simple enough to do it this way.
     </p>

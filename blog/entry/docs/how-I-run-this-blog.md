@@ -58,6 +58,10 @@ We're issuing `M-x markdown-export 'temp.html'` to get the initial entry. We the
 
 We'll also have a post-commit hook in git to handle pushing/syncing up GitHub and the webserver.
 
+#### 'blog-socialize-entry ####
+
+I haven't quite figured out how I want to do this yet. More to come when I figure it out.
+
 ## Python ##
 To supplement the creation of the markup, I'm using Python & BeautifulSoup. Emacs issues out a call with the following inputs to the file:
 
@@ -67,4 +71,4 @@ To supplement the creation of the markup, I'm using Python & BeautifulSoup. Emac
 
 From here, the script wraps the generated markup in the specified template, and fills in the "Other Entries" list. This is then dumped to the output_filename given.
 
-There may be a way to handle this portion via Emacs. For now though, it seemed simple enough to do it this way.
+There may be a way to handle this portion via Emacs. For now though, it seemed simple enough to do it this way. 
