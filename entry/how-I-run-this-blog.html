@@ -172,8 +172,24 @@
      </em>
      is what we'll use to take the generated &amp; formatted markup, push it into version control, and finally do any last things we need to do to get it on our web server.
     </p>
+    <ul>
+     <li>
+      Firstly, we'll use git-status to enter the Emacs VC buffer.
+      <ul>
+       <li>
+        By default, we'll mark all files to be added.
+       </li>
+      </ul>
+     </li>
+     <li>
+      A commit message will be brought up to enter any changes that have happened.
+     </li>
+     <li>
+      Finally, we'll switch back to the Markdown buffer to continue editing, if needed.
+     </li>
+    </ul>
     <p>
-     Firstly, we'll use git-status to enter the Emacs VC buffer. By default, we'll mark all files to be added. A commit message will be brought up to enter any changes that have happened.
+     We'll also have a post-commit hook in git to handle pushing/syncing up GitHub and the webserver.
     </p>
     <h2>
      Python

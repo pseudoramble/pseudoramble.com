@@ -51,7 +51,12 @@ We're issuing `M-x markdown-export 'temp.html'` to get the initial entry. We the
 
 *'blog-publish-entry* is what we'll use to take the generated & formatted markup, push it into version control, and finally do any last things we need to do to get it on our web server.
 
-Firstly, we'll use git-status to enter the Emacs VC buffer. By default, we'll mark all files to be added. A commit message will be brought up to enter any changes that have happened.
+* Firstly, we'll use git-status to enter the Emacs VC buffer.
+ * By default, we'll mark all files to be added.
+* A commit message will be brought up to enter any changes that have happened.
+* Finally, we'll switch back to the Markdown buffer to continue editing, if needed.
+
+We'll also have a post-commit hook in git to handle pushing/syncing up GitHub and the webserver.
 
 ## Python ##
 To supplement the creation of the markup, I'm using Python & BeautifulSoup. Emacs issues out a call with the following inputs to the file:
