@@ -1,5 +1,6 @@
 body {
-    font: 24px Helvetica;
+    font: 100% sans-serif;
+    font-family: 'Open Sans', sans-serif;
     background: #dcddd8;
     color: #354b5e;
 }
@@ -13,11 +14,11 @@ header {
     min-height: 75px;
     background: #D74B4B;
     padding: 10px;
-    font-size: 36px;
+    font-size: 2.2em;
 }
 
 nav > .previous-entries {
-    font-size: 14px;
+    font-size: 0.8em;
     margin: 0px;
     padding: 10px 0px 0px 10px;
     list-style: none;
@@ -29,7 +30,20 @@ nav > .previous-entries li {
 
 nav > .other-entries-title {
     font-weight: 800;
-    font-size: 20px;
+    font-size: 1.3em;
+}
+
+h2 {
+    font-size: 1.4em;
+}
+
+h4 {
+    font-size: 1.2em;
+    margin: 1.5em 0.5em 0.3em 0.1em;
+}
+
+p {
+    margin: 0.5em;
 }
 
 #main {
@@ -53,7 +67,6 @@ nav > .other-entries-title {
     flex: 3 1 60%;
     -webkit-order: 2;
     order: 2;
-    font-size: 18px;
 }
 
 #main > nav {
@@ -69,17 +82,17 @@ nav > .other-entries-title {
 .article-header {
     padding: 5px;
     font-weight: 800;
-    font-size: 2em;
+    font-size: 1.9em;
 }
 
 .label {
     font-weight: bold;
-    font-size: 19px;
+    font-size: 1.05em;
 }
 
 .quotation {
     display: block;
-    font-size: 22px;
+    font-size: 1.4em;
     font-style: italic;
     padding: 15px;
 }
@@ -91,7 +104,7 @@ nav > .other-entries-title {
 }
 
 .small {
-    font-size: 10px;
+    font-size: 0.7em;
     font-style: italic;
 }
 
