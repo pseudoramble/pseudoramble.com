@@ -45,7 +45,7 @@ I have *blog-file-type* set to ".md" and *blog-entry-dir* set to `~/blog/entries
 * Place output into new template copy
 * Do any markup changes needed
 
-We're issuing `M-x markdown-export 'temp.html'` to get the initial entry. We then use Python and BS4 to smush it together to make it look like a reasonable entry. See the Python section for more details.
+We're issuing `M-x markdown-export 'temp.html'` to get the initial entry. We then use Python and BS4 to smash it together to make it look like a reasonable entry. See the Python section for more details.
 
 #### 'blog-publish-entry ####
 
