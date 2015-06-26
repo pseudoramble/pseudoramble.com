@@ -65,4 +65,4 @@ To supplement the creation of the markup, I'm using Python & BeautifulSoup. Emac
 * output_filename - The (absolute) name of the file where the updated markup will be stored
 * template_filename - The (absolute) name of the file where we'll put generated markup into
 
-There may be a way to handle this portion via Emacs. For now though, it seemed simple enough to try it this way. I may modify it later, but for the time being this was the easiest way forward. It seems to work fine too.
+There may be a way to handle this portion via Emacs. For now though, it seemed simple enough to do it this way.
