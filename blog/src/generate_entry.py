@@ -42,7 +42,7 @@ def _get_previous_entries_(output_dir, cur_filename):
 if len(sys.argv) > 3:
     input_filename, output_filename, template_filename = (sys.argv[1], sys.argv[2], sys.argv[3])
     output_dir = Path(output_filename).parent
-    prev_entries = _get_previous_entries_(output_dir, output_filename)
+    prev_entries = _get_previous_entries_(output_dir, output_filename)[:5]
     
     with open(input_filename) as input_fd, open(template_filename) as template_fd:
         entry_markup = input_fd.read()
