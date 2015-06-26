@@ -1,9 +1,9 @@
 <div class="article-header">How I Run This Blog</div>
 As I write this, I'm currently creating the code to operate this blog. These are essentially my notes, a new entry, and a neat outline of things I'm creating.
 
-This blog has a few simple strategies:
+This blog has a few simple ideas behind it:
 
-* None of this content needs to be dynamically generated at run-time
+* None of this content needs to be generated at run-time
 * Almost none of this content needs JS
 * I want to be able to start writing, previewing, publishing, and sharing new entries without much thought
 
