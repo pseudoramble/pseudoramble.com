@@ -109,6 +109,10 @@ p {
 }
 
 @media all and (max-width: 768px) {
+    body {
+        font-size: 90%;
+    }
+    
     #main, #page {
         -webkit-flex-flow: column;
         flex-direction: column;
