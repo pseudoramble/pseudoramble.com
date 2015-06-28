@@ -18,6 +18,14 @@
     <div class="article-header">
      How I Run This Blog
     </div>
+    <div class="dates">
+     <span>
+      Published on 2015-06-28
+     </span>
+     <span>
+      Modified on 2015-06-28
+     </span>
+    </div>
     <p>
      As I write this, I'm currently creating the code to operate this blog. These are essentially my notes, a new entry, and a neat outline of things I'm creating.
     </p>
@@ -211,7 +219,18 @@
      Python
     </h2>
     <p>
-     To supplement the creation of the markup, I'm using Python &amp; BeautifulSoup. Emacs issues out a call with the following inputs to the file:
+     To supplement the creation of the markup, I'm using Python &amp; BeautifulSoup. The script serves two major functions:
+    </p>
+    <ul>
+     <li>
+      Move the entry into the template file
+     </li>
+     <li>
+      Modify the DOM to fit what's needed
+     </li>
+    </ul>
+    <p>
+     Emacs issues out a call to said script with the following inputs to the file:
     </p>
     <ul>
      <li>
@@ -225,10 +244,7 @@
      </li>
     </ul>
     <p>
-     From here, the script wraps the generated markup in the specified template, and fills in the "Other Entries" list. This is then dumped to the output_filename given.
-    </p>
-    <p>
-     There may be a way to handle this portion via Emacs. For now though, it seemed simple enough to do it this way.
+     The script then handles determining what the rough created/modified dates are, adding previous entries to the document, and finally saving its work to the final product.
     </p>
    </article>
    <nav>

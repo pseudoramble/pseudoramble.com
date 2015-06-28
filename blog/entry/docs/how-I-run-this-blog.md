@@ -67,12 +67,15 @@ I'm also not sure what forms of social media I want to use yet. Facebook and Twi
 All and all, I'm not sure what I want yet. So we'll see how it goes!
 
 ## Python ##
-To supplement the creation of the markup, I'm using Python & BeautifulSoup. Emacs issues out a call with the following inputs to the file:
+To supplement the creation of the markup, I'm using Python & BeautifulSoup. The script serves two major functions:
+
+* Move the entry into the template file
+* Modify the DOM to fit what's needed
+
+Emacs issues out a call to said script with the following inputs to the file:
 
 * input_filename - The (absolute) name of the file containing the generated markup
 * output_filename - The (absolute) name of the file where the updated markup will be stored
 * template_filename - The (absolute) name of the file where we'll put generated markup into
 
-From here, the script wraps the generated markup in the specified template, and fills in the "Other Entries" list. This is then dumped to the output_filename given.
-
-There may be a way to handle this portion via Emacs. For now though, it seemed simple enough to do it this way. 
+The script then handles determining what the rough created/modified dates are, adding previous entries to the document, and finally saving its work to the final product.
