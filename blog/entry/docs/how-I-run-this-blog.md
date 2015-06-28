@@ -60,7 +60,11 @@ We'll also have a post-commit hook in git to handle pushing/syncing up GitHub an
 
 #### 'blog-socialize-entry ####
 
-I haven't quite figured out how I want to do this yet. More to come when I figure it out.
+I haven't quite figured out how I want to do this yet. There are some options, like [Buffer](https://www.buffer.com) that I may use. I wouldn't mind having something more Emacs-centric or command-line centric either though.
+
+I'm also not sure what forms of social media I want to use yet. Facebook and Twitter seem like obvious choices. Maybe G+ and Tumblr too. So that's another question.
+
+All and all, I'm not sure what I want yet. So we'll see how it goes!
 
 ## Python ##
 To supplement the creation of the markup, I'm using Python & BeautifulSoup. Emacs issues out a call with the following inputs to the file:
