@@ -33,6 +33,21 @@ nav > .other-entries-title {
     font-size: 1.3em;
 }
 
+nav.index {
+    background-color: #354b5e;
+    color: #dcddd8;
+    display: -webkit-fix;
+    display:        flex;
+    -webkit-flex-flow: row;
+    flex-flow: row;
+}
+
+nav.index span {
+    flex: auto;
+    text-align: center;
+    font-size: 1.8em;
+}
+
 .dates span {
     font-size: 0.65em;
     padding: 0 0 0 5px;
@@ -60,16 +75,19 @@ p {
     flex-flow: row;
 }
 
-#main a {
-    text-decoration: none;
+nav a {
     color: inherit;
+}
+
+nav.index a {
+    text-decoration: none;
 }
 
 #main > article {
     padding: 10px;
     background: #dcddd8;
-    -webkit-flex: 3 1 60%;
-    flex: 3 1 60%;
+    -webkit-flex: 3 1 80%;
+    flex: 3 1 80%;
     -webkit-order: 2;
     order: 2;
 }
@@ -124,7 +142,7 @@ p {
     
     #main, #page {
         -webkit-flex-flow: column;
-        flex-direction: column;
+        flex-flow: column;
     }
 
     #main > article, #main > nav, #main > aside {
@@ -141,5 +159,10 @@ p {
     nav > .previous-entries li {
         list-style-type: none;
         text-decoration: underline;
+    }
+
+    nav.index {
+        -webkit-flex-flow: column;
+        flex-flow: column;
     }
 }
