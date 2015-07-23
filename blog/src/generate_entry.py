@@ -57,11 +57,21 @@ def change_dates(view, is_new_entry):
     dates_node.append(modified_node)
     view.find('article').insert(1, dates_node)
 
+def initialize_index_view(index_filename):
+    with open(index_filename) as index_file_fd:
+        return BeautifulSoup(index_file_fd.read())
+
+def set_latest_blog_entry(index_view, url):
+    blog_entry_link = index_view.find(id='blog_entry_link')
+    
+    if blog_entry_link:
+        blog_entry_link['href'] = url
+
 def _get_previous_entries_(output_dir, cur_filename):
     return [entry for entry in Path(output_dir).glob('*.html') if cur_filename.find(entry.name) < 0]
     
 if len(sys.argv) > 3:
-    input_filename, output_filename, template_filename = (sys.argv[1], sys.argv[2], sys.argv[3])
+    input_filename, output_filename, template_filename, index_filename = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     output_file_path = Path(output_filename)
     output_dir = output_file_path.parent
     prev_entries = _get_previous_entries_(output_dir, output_filename)[:5]
@@ -75,5 +85,9 @@ if len(sys.argv) > 3:
 
     add_previous_entries(entry_view, prev_entries)
     change_dates(entry_view, is_new_entry)
-
     store_view(entry_view, output_filename)
+
+    entry_url = "blog/entry/%s" % output_file_path.name
+    index_view = initialize_index_view(index_filename)
+    set_latest_blog_entry(index_view, entry_url)
+    store_view(index_view, index_filename)

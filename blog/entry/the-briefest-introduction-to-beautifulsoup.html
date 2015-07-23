@@ -5,7 +5,8 @@
   <link href="../site.css" media="screen" rel="stylesheet" type="text/css"/>
   <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>
   <link href="../rainbow-style.css" rel="stylesheet" type="text/css"/>
-  <script src="../rainbow-custom.min.js"></script>
+  <script src="../rainbow-custom.min.js">
+  </script>
  </head>
  <body>
   <header>
@@ -18,10 +19,10 @@
     </div>
     <div class="dates">
      <span>
-      Published on 2015-07-20
+      Published on 2015-07-22
      </span>
-     <span class="hidden">
-      Modified on 2015-07-20
+     <span>
+      Modified on 2015-07-22
      </span>
     </div>
     <p>
@@ -49,7 +50,7 @@
         view.find('ul', class_='previous-entries').append(li)
 
     return view
-    </code></pre>
+</code></pre>
     <p>
      <a href="https://github.com/pseudoramble/pseudoramble.com/blob/master/blog/src/generate_entry.py">
       In the code above
@@ -59,7 +60,7 @@
       Path
      </a>
      objects to a set of previous entries to link to. With that, we create a new bowl-o-soup (known as
-     <code>>
+     <code>
       prev_soup
      </code>
      in this case), and find the title of the entry. (listed under the div  with a class of 'article-header'. We then hook it into the view's list of previous entries with a new link and li, and move on.
