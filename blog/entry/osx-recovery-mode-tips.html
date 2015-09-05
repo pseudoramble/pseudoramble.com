@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="../site.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>
+  <link href="../rainbow-style.css" rel="stylesheet" type="text/css"/>
+  <script src="../rainbow-custom.min.js">
+  </script>
+ </head>
+ <body>
+  <header>
+   Pseudo Ramble
+  </header>
+  <div id="main">
+   <article>
+    <div class="article-header">
+     OS X Recovery Mode Tips
+    </div>
+    <div class="dates">
+     <span>
+      Published on 2015-09-05
+     </span>
+     <span class="hidden">
+      Modified on 2015-09-05
+     </span>
+    </div>
+    <p>
+     I've recently taken up the adventure of looking at my girlfriend's semi-dead Macbook Pro. I had been neglecting the poor thing for too long, and it was time to get it up and running.
+    </p>
+    <p>
+     I think (or maybe hope) the issue may be a corrupt filesystem, perhaps in the boot blocks or the Volume Header. While it can't boot into OSX properly anymore, the personal data recovered from the disk seems to be in-tact. Thankfully, the OSX Recovery Mode (in this case) has made it fairly simple to get this data back. Not without a few hiccups of course.
+    </p>
+    <h2>
+     First off, what is Recovery Mode?
+    </h2>
+    <p>
+     Recovery Mode is a special feature on a Mac to allow a user access to a basic environment on the machine. This mostly allows for diagnostics to be performed on the machine (memory tests, filesytem tests and repairs, etc.). It does provide some other utilites though, such as recovery using Time Machine and a few handy command line tools.
+    </p>
+    <p>
+     For those familiar with Linux, just imagine loading an image into memory from a disk or thumb drive (a very similar setup). For people who are used to Windows or OSX, imagine the little OS you get to run when installing from a boot disk.
+    </p>
+    <p>
+     To access Recovery Mode, hold CMD-R during boot. After a minute or so, you should be dropped into a screen like this:
+    </p>
+    <p>
+     <img alt="OS X Recovery Mode Screenshot" src="http://cdn3.tekrevue.com/wp-content/uploads/2014/09/osx-recovery.jpg" title=""/>
+    </p>
+    <h2>
+     One other note...
+    </h2>
+    <p>
+     While I hope you gather good tips and ideas while reading this, realize you should also have a good laugh at my expense at some parts. The moral of the story is, planning ahead can help.
+    </p>
+    <h2>
+     Tips
+    </h2>
+    <ol>
+     <li>
+      <strong>
+       Avoid a situation where you need to do a backup from Recovery Mode.
+      </strong>
+      <br/>
+      In this case, we weren't properly prepared with a backup on this machine. It's obviously much better to plan for later where possible.
+     </li>
+     <li>
+      <strong>
+       Use Time Machine to perform your recovery, if possible.
+      </strong>
+      <br/>
+      While I'm not very familiar with Time Machine yet, it seems like a useful utility to take advantage of. And since Recovery Mode supports restoring a machine with this, it seems worthwhile to spare yourself in the future.
+     </li>
+     <li>
+      <strong>
+       Adjust the powermanagement settings to disable sleep mode.
+      </strong>
+      <br/>
+      Recovery Mode appears configured to have the machine go to sleep after 10 minutes by default (power adapter or otherwise). Since the system won't adjust the timer for sleeping due to something on the command line, this will terminate your remote backup attempts.
+      <br/>
+      <ol>
+       <li>
+        <em>
+         First, check the power settings
+        </em>
+        .
+        <br/>
+        Do this by running
+        <code>
+         pmset -g
+        </code>
+        . This lists off current settings such as if sleep mode or disk-sleep mode are on, how long until something turns off, etc.
+       </li>
+       <li>
+        <em>
+         Next, disable sleep mode if needed for the disk and the system
+        </em>
+        .
+        <br/>
+        Do this by running
+        <code>
+         pmset -a sleep 0
+        </code>
+        , then run
+        <code>
+         pmset -a disksleep 0
+        </code>
+        . The zero in this case denotes how many minutes until either of these settings is applied.
+       </li>
+      </ol>
+     </li>
+     <li>
+      <strong>
+       Ensure your backup machine is reliable
+      </strong>
+      <br/>
+      During the backup, I found that my typical backup machine was being quite unreliable (dropping its connection to the network). It's also not the fastest machine, which just meant the process took even longer than one would like. Switching over to my primary computer which is much more reliable seemed to help greatly.
+     </li>
+     <li>
+      <strong>
+       Ensure your backup machine has enough disk space
+      </strong>
+      <br/>
+      During the backup onto my primary machine, I found out that I was lacking in the disk space needed for this.
+      <br/>
+      <ol>
+       <li>
+        <em>
+         Calculate the size of the directory to back up.
+        </em>
+        <br/>
+        Do this by running
+        <code>
+         du -sh
+        </code>
+        . It should give you the total directory structure's size in GB's (a more 'human-readable' format if you will).
+       </li>
+       <li>
+        <em>
+         Check for duplicated items
+        </em>
+        <br/>
+        It turns out there were duplicated items within the user's Library directory (all of the User directory essentially). Skipping those bought me a ton of extra space. I don't know the reason behind their duplication yet however.
+       </li>
+      </ol>
+     </li>
+     <li>
+      <strong>
+       Get your backup plan in place after you've recovered
+      </strong>
+      Now that I've got the backup finished and the machine running once again, I need to put into place some kind of backup strategy. On my current (Linux) machine, I use a simple rsync setup to a few different locations, which would be sufficient here too. That being said, Time Machine seems like a worthwhile thing to investigate first.
+     </li>
+    </ol>
+   </article>
+   <nav>
+    <span class="other-entries-title">
+     Other Entries
+    </span>
+    <ul class="previous-entries" id="previous-entries-list">
+     <li>
+      <a href="how-I-run-this-blog.html">
+       How I Run This Blog
+      </a>
+     </li>
+     <li>
+      <a href="diagonol-yer-cube.html">
+       I'll Diagonol Yer Cube
+      </a>
+     </li>
+     <li>
+      <a href="the-briefest-introduction-to-beautifulsoup.html">
+       The Briefest Introduction to BeautifulSoup
+      </a>
+     </li>
+     <li>
+      <a href="consider-using-collection-functions.html">
+       Consider Using Collection Functions
+      </a>
+     </li>
+     <li>
+      <a href="workbench-setup-part-1.html">
+       Workbench Setup - Part 1
+      </a>
+     </li>
+    </ul>
+   </nav>
+  </div>
+ </body>
+</html>
