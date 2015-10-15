@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="../site.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>
+  <link href="../rainbow-style.css" rel="stylesheet" type="text/css"/>
+  <script src="../rainbow-custom.min.js">
+  </script>
+ </head>
+ <body>
+  <header>
+   Pseudo Ramble
+  </header>
+  <div id="main">
+   <article>
+    <div class="article-header">
+     Understanding React - A Refactoring
+    </div>
+    <div class="dates">
+     <span>
+      Published on 2015-10-14
+     </span>
+     <span>
+      Modified on 2015-10-14
+     </span>
+    </div>
+    <p>
+     <strong>
+      To see the changes discussed in this entry,
+      <a href="https://github.com/pseudoramble/listen-to-railroad-earth/commit/4ee25c46d48f6ad8b102a0280e0c1c218887198e">
+       check out this commit!
+      </a>
+     </strong>
+    </p>
+    <p>
+     <strong>
+      To see the Listen to Railroad Earth player running,
+      <a href="http://104.236.199.146:3000/">
+       check out this site!
+      </a>
+     </strong>
+    </p>
+    <p>
+     Ever begin working on a set of code to get something working, only to realize that you can't make forward progress? That was me, while working on a
+     <a href="https://github.com/pseudoramble/listen-to-railroad-earth">
+      side project
+     </a>
+     .
+    </p>
+    <p>
+     See, my component named
+     <code>
+      Player
+     </code>
+     was trying to be quite smart.
+     <a href="https://github.com/pseudoramble/listen-to-railroad-earth/blob/67a822908ab79c1be7e94772b98a43d710497a3b/src/client/app/components/Player/Player.jsx">
+      You can see the original version of the file here
+     </a>
+     .
+     <code>
+      Player
+     </code>
+     was supposed to have the following features:
+    </p>
+    <ol>
+     <li>
+      Showed the typical HTML5 audio controls.
+     </li>
+     <li>
+      The player would show the currently playing track
+     </li>
+     <li>
+      Had the ability to go to the previous &amp; next tracks in a playlist.
+     </li>
+     <li>
+      If the player was left running, it would continue through the existing playlist.
+     </li>
+     <li>
+      If a new playlist was selected, it would reload with said playlist and begin playing that instead.
+     </li>
+    </ol>
+    <p>
+     As you can see and probably imagine,
+     <code>
+      Player
+     </code>
+     was trying to be way too smart for everyone's good:
+    </p>
+    <ol>
+     <li>
+      There was messy state to maintain.
+     </li>
+     <li>
+      There were edge cases to be detected and dealt with.
+     </li>
+     <li>
+      This component had no real sense of separation of concerns (code should serve one small set of purposes).
+     </li>
+    </ol>
+    <p>
+     <a href="http://facebook.github.io/flux/docs/overview.html">
+      React + Flux
+     </a>
+     are put together to organize this setup so you avoid the situation I ended up in. Using a Flux architecture, you tend to force most data manipulating &amp; related logic in Stores. This leaves React components to typically be more simplified, and focused on rendering said data.
+    </p>
+    <p>
+     The refactor looked like this:
+    </p>
+    <ul>
+     <li>
+      I modified the
+      <code>
+       Player
+      </code>
+      component to move all state-management into a Store.
+     </li>
+     <li>
+      The Store and the
+      <code>
+       Player
+      </code>
+      component are then connected via an Action Creator and a Dispatcher.
+     </li>
+     <li>
+      The Store then emits an event which the root component (
+      <code>
+       App
+      </code>
+      in this case) is looking for.
+     </li>
+     <li>
+      <code>
+       App
+      </code>
+      updates its state as needed.
+     </li>
+     <li>
+      Finally, all subcomponents of
+      <code>
+       App
+      </code>
+      are updated (via
+      <code>
+       render()
+      </code>
+      ) using only
+      <code>
+       props
+      </code>
+      .
+     </li>
+    </ul>
+    <p>
+     A more visual sketch of the refactor might look like this:
+    </p>
+    <pre><code>*User clicks next track*                                                              |-&gt; (Reconfig setlist)
+----------------                    ------------------                                -------------
+|              |  onTrackFinished   |                | {actionType : TRACK_FINISHED}  |           |
+| Player (jsx) | -----------------&gt; | PlayerActions  | -----------------------------&gt; | ShowStore | ----------
+|              |                    |                |     (Via the Dispatcher!)      |           |          |
+----------------                    ------------------                                -------------          |
+^                                                                                                            |
+|____________________________________________________________________________________________________________|
+   (Emit an event to have the "root" component of the application update its state. Send props to Player.)
+</code></pre>
+    <p>
+     Once I had this realization, implementing new features (like previous/next, continuous playing of a setlist) became much more simplified. Keeping your concerns separated and only loosly connected really does work, to a degree.
+    </p>
+    <p>
+     <strong>
+      In closing, I'll leave you with a few clues that you may need to refactor your React component(s):
+     </strong>
+    </p>
+    <ol>
+     <li>
+      You use
+      <code>
+       setState()
+      </code>
+      like a boss and you're not quite sure why.
+     </li>
+     <li>
+      There are a bunch of edge cases to handle in a component.
+     </li>
+     <li>
+      You're playing bug whack-a-mole (you fix one bug, only to create two more) in a component.
+     </li>
+     <li>
+      A component is doing lots of data manipulation.
+     </li>
+     <li>
+      Basic functionality seems to be impossible to enhance.
+     </li>
+    </ol>
+   </article>
+   <nav>
+    <span class="other-entries-title">
+     Other Entries
+    </span>
+    <ul class="previous-entries" id="previous-entries-list">
+     <li>
+      <a href="how-I-run-this-blog.html">
+       How I Run This Blog
+      </a>
+     </li>
+     <li>
+      <a href="diagonol-yer-cube.html">
+       I'll Diagonol Yer Cube
+      </a>
+     </li>
+     <li>
+      <a href="the-briefest-introduction-to-beautifulsoup.html">
+       The Briefest Introduction to BeautifulSoup
+      </a>
+     </li>
+     <li>
+      <a href="consider-using-collection-functions.html">
+       Consider Using Collection Functions
+      </a>
+     </li>
+     <li>
+      <a href="workbench-setup-part-1.html">
+       Workbench Setup - Part 1
+      </a>
+     </li>
+    </ul>
+   </nav>
+  </div>
+ </body>
+</html>
