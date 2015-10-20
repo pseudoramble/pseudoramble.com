@@ -4,6 +4,7 @@ from datetime import date
 
 import sys
 import soup_utils
+import functools
 
 def initialize_view(entry_markup, template_markup):
     temp_view = BeautifulSoup(entry_markup)
@@ -68,7 +69,14 @@ def set_latest_blog_entry(index_view, url):
         blog_entry_link['href'] = url
 
 def _get_previous_entries_(output_dir, cur_filename):
-    return [entry for entry in Path(output_dir).glob('*.html') if cur_filename.find(entry.name) < 0]
+    def _by_creation_date_(a, b):
+        a_date = a.stat().st_ctime
+        b_date = b.stat().st_ctime
+        
+        return b_date - a_date
+        
+    entries = [entry for entry in Path(output_dir).glob('*.html') if cur_filename.find(entry.name) < 0]
+    return sorted(entries, key=functools.cmp_to_key(_by_creation_date_))
     
 if len(sys.argv) > 3:
     input_filename, output_filename, template_filename, index_filename = (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
@@ -83,6 +91,8 @@ if len(sys.argv) > 3:
 
     entry_view = initialize_view(entry_markup, template_markup)
 
+    print(prev_entries)
+    
     add_previous_entries(entry_view, prev_entries)
     change_dates(entry_view, is_new_entry)
     store_view(entry_view, output_filename)
