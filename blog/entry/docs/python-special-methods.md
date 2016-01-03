@@ -1,5 +1,7 @@
 <div class="article-header">Python's Special Methods</div>
 
+(To see the complete code for this entry, [clone the repo for this page here!](https://github.com/pseudoramble/blog-demos/tree/master/src/python-special-methods))
+
 Let's talk a little about [Python's Special Methods](https://docs.python.org/3.5/reference/datamodel.html#special-method-names) by building up an example. Suppose you've got some mutual/index fund you own some shares of. You'd like to compare the Net Asset Value (NAV) from the end of last year to the end of this year. I imagined the code might look like this: [[1]](#1)[[2]](#2)
 
     from NAV import NAV
