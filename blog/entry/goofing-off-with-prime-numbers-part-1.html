@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="../site.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>
+  <link href="../rainbow-style.css" rel="stylesheet" type="text/css"/>
+  <script src="../rainbow-custom.min.js">
+  </script>
+ </head>
+ <body>
+  <header>
+   Pseudo Ramble
+  </header>
+  <div id="main">
+   <article>
+    <div class="article-header">
+     Goofing off With Prime Number Part 1 - The Sieve of Eratosthenes
+    </div>
+    <div class="dates">
+     <span>
+      Published on 2016-04-01
+     </span>
+     <span>
+      Modified on 2016-04-01
+     </span>
+    </div>
+    <p>
+     I am not fantastic at math. I've always found it interesting, but it's never come to me naturally. Sometimes it's good to face things you're not good at and give them a shot! So here we are, goofing off with prime numbers.
+    </p>
+    <h2>
+     So first off, what is a prime number anyway?
+    </h2>
+    <p>
+     Using a grade school explanation of it, prime numbers are natural numbers that can be evenly divided by two divisors - the number itself and 1.
+    </p>
+    <p>
+     A few things:
+    </p>
+    <ul>
+     <li>
+      By natural number, I mean whole number (no decimals or complex numbers or crazy things) &gt; 0.
+     </li>
+     <li>
+      By divisors, I mean a denominator. So in
+      <code>
+       10 / 2 = 5
+      </code>
+      , it would be 2.
+     </li>
+     <li>
+      Those factors are the number itself (
+      <code>
+       n
+      </code>
+      lets say) and the number 1.
+     </li>
+    </ul>
+    <p>
+     Okay, cool. So some number, itself, and 1. Got it.
+    </p>
+    <h2>
+     What are some prime numbers?
+    </h2>
+    <p>
+     A small sample would be
+     <code>
+      {2, 3, 5, 7}
+     </code>
+     .
+    </p>
+    <h2>
+     How did you figure that out?
+    </h2>
+    <p>
+     Let's first try out a real quick test for prime numbers between 1 and 10:
+    </p>
+    <ol>
+     <li>
+      &#10008; Trick question. One isn't considered a prime number.
+     </li>
+     <li>
+      &#10004; That's our only option here!
+     </li>
+     <li>
+      &#10004; We can skip
+      <code>
+       3 / 3
+      </code>
+      and
+      <code>
+       3 / 2 = 1.5
+      </code>
+      doesn't work. So count 3!
+     </li>
+     <li>
+      &#10008;
+      <code>
+       4 / 2 = 2
+      </code>
+      so we can't count 4.
+     </li>
+     <li>
+      &#10004;
+      <code>
+       5 / 4
+      </code>
+      |
+      <code>
+       5 / 3
+      </code>
+      |
+      <code>
+       5 / 2
+      </code>
+      don't give us whole numbers. So count 5!
+     </li>
+     <li>
+      &#10008;
+      <code>
+       6 / 5
+      </code>
+      |
+      <code>
+       6 / 4
+      </code>
+      won't work.
+      <code>
+       6 / 3 = 2
+      </code>
+      so we can't count 6.
+     </li>
+     <li>
+      &#10004;
+      <code>
+       7 / 6
+      </code>
+      |
+      <code>
+       7 / 5
+      </code>
+      |
+      <code>
+       7 / 4
+      </code>
+      |
+      <code>
+       7 / 3
+      </code>
+      |
+      <code>
+       7 / 2
+      </code>
+      don't give us whole numbers. So count 7!
+     </li>
+     <li>
+      &#10008;
+      <code>
+       8 / 4 = 2
+      </code>
+      so we can't count 8.
+     </li>
+     <li>
+      &#10008;
+      <code>
+       9 / 3 = 3
+      </code>
+      so we can't count 9.
+     </li>
+     <li>
+      &#10008;
+      <code>
+       10 / 5 = 2
+      </code>
+      so we can't count 10.
+     </li>
+    </ol>
+    <p>
+     Putting it together, you get the set
+     <code>
+      {2, 3, 5, 7}
+     </code>
+     .
+    </p>
+    <p>
+     You might notice a few things too:
+    </p>
+    <ul>
+     <li>
+      All of the even numbers are omitted (save for 2). So right away you knocked out 4, 6, 8, and 10.
+     </li>
+     <li>
+      All of the numbers that are multiples of 3 were removed (save for 3). So you could eliminate 6 and 9.
+     </li>
+     <li>
+      Even if we somehow missed that 10 / 2 = 5, we would catch that 10 / 5 = 2.
+      <ul>
+       <li>
+        In other words, multiples of 5 disappear.
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <p>
+     You're finding
+     <em>
+      all numbers that are multiples of something else
+     </em>
+     . Once you've eliminated those numbers, you're left with the prime numbers! And that is the essence of the Sieve of Eratosthenes.
+    </p>
+    <p>
+     <a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">
+      Here's a handy illistration from Wikipedia
+     </a>
+     :
+    </p>
+    <p>
+     <img alt="Sieve of Eratosthenes" src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Sieve_of_Eratosthenes_animation.gif" title=""/>
+    </p>
+    <h2>
+     So how do I find the prime numbers under 123,456?!
+    </h2>
+    <p>
+     Running this by hand (or most algorithms really) can be tedious. Good thing we've got these shiny fancy computer boxes now. They're even internet-enabled now!
+    </p>
+    <p>
+     <a href="https://github.com/pseudoramble/hundred-projects/blob/master/f%23/Numbers/sieve.fsx">
+      An implementation of this I put together in F# can be found here
+     </a>
+     . The way I put together my implementation was probably not the most efficient, but I think is somewhat straight forward (here's a paired down form to show the idea):
+    </p>
+    <pre><code>let rec runTest multipliers limit removals =
+    let multipler = List.head multipliers
+
+    if multipler &gt; int (sqrt (float limit))
+    then
+        removals
+    else
+        let updatedRemovals = generateStep multipler limit removals
+        runTest (List.tail multipliers) limit updatedRemovals
+
+let n = 123456
+let startSeq = seq { for i in 2 .. n -&gt; i }
+
+runTest (List.ofSeq startSeq) n Set.empty
+|&gt; Set.diffeernce (Set.ofSeq startSeq)
+</code></pre>
+    <p>
+     <strong>
+      A quick breakdown of the code above
+     </strong>
+     :
+    </p>
+    <ol>
+     <li>
+      First, check if we need to calculate more primes by looking at the next multiplier.
+      <ol>
+       <li>
+        If we do need to check, we generate the values from
+        <code>
+         multiplier^2
+        </code>
+        to the upper bound specified.
+       </li>
+       <li>
+        We that set of values with the previously calculated value to omit (see
+        <code>
+         Set.union
+        </code>
+        ).
+       </li>
+       <li>
+        Repeat from #1.
+       </li>
+      </ol>
+     </li>
+     <li>
+      Once here, all the composite numbers have been found.
+      <ol>
+       <li>
+        These are removed from the range from 2 to the upper bound (see
+        <code>
+         Set.difference
+        </code>
+        ).
+       </li>
+      </ol>
+     </li>
+     <li>
+      You are now left with only prime numbers!
+     </li>
+    </ol>
+    <p>
+     So there you have it - A way to find prime numbers. In Part 2, we'll goof around more by talking about how prime numbers actually can make
+     <em>
+      any
+     </em>
+     other natural number.
+    </p>
+   </article>
+   <nav>
+    <span class="other-entries-title">
+     Other Entries
+    </span>
+    <ul class="previous-entries" id="previous-entries-list">
+     <li>
+      <a href="should-i-go-to-dunkin-donuts-today.html">
+       Should I Go To Dunkin Donuts Today?
+      </a>
+     </li>
+     <li>
+      <a href="python-special-methods.html">
+       Python's Special Methods
+      </a>
+     </li>
+     <li>
+      <a href="understanding-react-via-a-refactoring.html">
+       Understanding React - A Refactoring
+      </a>
+     </li>
+     <li>
+      <a href="osx-recovery-mode-tips.html">
+       OS X Recovery Mode Tips
+      </a>
+     </li>
+     <li>
+      <a href="the-briefest-introduction-to-beautifulsoup.html">
+       The Briefest Introduction to BeautifulSoup
+      </a>
+     </li>
+    </ul>
+   </nav>
+  </div>
+ </body>
+</html>
