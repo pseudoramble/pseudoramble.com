@@ -14,13 +14,9 @@
   </header>
   <div id="main">
    <article>
-    <p>
-     ht.
-     <strong>
-      These are known as composite numbers
-     </strong>
-     .
-    </p>
+    <div class="article-header">
+     Goofing off With Prime Number Part 2 - Prime Factorization
+    </div>
     <div class="dates">
      <span>
       Published on 2016-04-18
@@ -29,6 +25,394 @@
       Modified on 2016-04-18
      </span>
     </div>
+    <p>
+     I am not fantastic at math. I've always found it interesting, but it's never come to me naturally. Sometimes it's good to face things you're not good at and give them a shot! So here we are, goofing off with prime numbers (again).
+    </p>
+    <p>
+     <a href="http://pseudoramble.com/blog/entry/goofing-off-with-prime-numbers-part-1.html">
+      Here's what we talked about the last time we goofed off with prime numbers.
+     </a>
+    </p>
+    <h2>
+     I don't feel like reading your last entry. What are you talking about?
+    </h2>
+    <p>
+     Last time we talked about what a prime number is, and how to generate a set of prime numbers within some range using a sieve. This included some sample code in F# that you could use if you wanted to.
+    </p>
+    <p>
+     Here's another potential grade school thing you may have forgotten - Any natural number can be formed by using a series of prime numbers put together! This was something I forgot about until learning more about prime factorization.
+    </p>
+    <h2>
+     Explain yourself!
+    </h2>
+    <p>
+     As college professors I had would state, we can use our intuition to see that we have two kinds of natural numbers:
+    </p>
+    <ul>
+     <li>
+      Prime numbers like
+      <code>
+       {2, 3, 5, 7, 11}
+      </code>
+     </li>
+     <li>
+      Other kinds of numbers
+      <code>
+       {4, 6, 8, 9, 10}
+      </code>
+     </li>
+    </ul>
+    <h3>
+     What are these "other kinds of numbers" anyway?
+    </h3>
+    <p>
+     One thing you might've noticed is that one could use the prime numbers listed above to obtain the other kinds of numbers listed below. They might look like:
+    </p>
+    <ul>
+     <li>
+      <code>
+       4 = 2 * 2
+      </code>
+     </li>
+     <li>
+      <code>
+       6 = 2 * 3
+      </code>
+     </li>
+     <li>
+      <code>
+       8 = 2 * 2 * 2
+      </code>
+     </li>
+     <li>
+      <code>
+       9 = 3 * 3
+      </code>
+     </li>
+     <li>
+      <code>
+       10 = 2 * 5
+      </code>
+     </li>
+    </ul>
+    <p>
+     So yeah, numbers on the left are formed by multiplying the prime numbers listed on the right.
+     <strong>
+      These are known as composite numbers
+     </strong>
+     .
+    </p>
+    <h2>
+     What other kinds of Natural Numbers are there?
+    </h2>
+    <p>
+     We now know of prime and composite natural numbers. Are there any other kinds?
+    </p>
+    <p>
+     It turns out there isn't. The
+     <a href="https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic">
+      fundamental theorem of arithmetic
+     </a>
+     spells this out for us. In essence,
+     <em>
+      all numbers are either prime or composite.
+     </em>
+     Beyond that, each composite number has a
+     <em>
+      unique prime factorization
+     </em>
+     .
+    </p>
+    <p>
+     So for example, in the case of
+     <code>
+      10 = 2 * 5
+     </code>
+     the set
+     <code>
+      {2, 5}
+     </code>
+     is the only prime representation of 10 that can exist.
+    </p>
+    <p>
+     That means that we can hunt down a factorization of a particular number. As long as all the pieces are prime, we can be sure that you can't factor it any other way using prime numbers.
+    </p>
+    <h2>
+     Can you run through some examples?
+    </h2>
+    <p>
+     Examples are always good. Let's look at the number 12. How might we go about finding the prime factors of this? We need to know how we can break 12 down into smaller even parts. We also know that since we're only interested in prime numbers, we can skip other numbers like 4 and 8 because they're not interesting here.
+    </p>
+    <p>
+     So first, let's get some primes together, shall we?
+     <a href="http://pseudoramble.com/blog/entry/goofing-off-with-prime-numbers-part-1.html">
+      Using our handy sieve from last time
+     </a>
+     , we get the prime numbers &lt;= 12:
+     <code>
+      {2, 3, 5, 7, 11}
+     </code>
+     These will be our "tests" and be the only possible factors we can see in our answer.
+    </p>
+    <p>
+     Since a lot more numbers will be divisible by 2 than 3 (so on and so on) we can start from the first and go to the last prime in our test. We're going to look for numbers that divide 12 evenly, but eliminate numbers that composites as we go along.
+    </p>
+    <ul>
+     <li>
+      <code>
+       12 / 2 = 6
+      </code>
+      . So we'll keep 2.
+      <ul>
+       <li>
+        <code>
+         6 % 2 = 0
+        </code>
+        however. Let's factor that out.
+       </li>
+       <li>
+        <code>
+         6 / 2 = 3
+        </code>
+        . So we'll keep 2 (again).
+        <ul>
+         <li>
+          <code>
+           3 % 2 = 1
+          </code>
+          . So we would move onto testing the next prime, 3.
+         </li>
+         <li>
+          <code>
+           3 * 3 &gt; 3
+          </code>
+          though. We can skip factoring numbers &lt; sqrt(n) because we'll have already tested for this.
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </li>
+     <li>
+      Combining the factors, we get
+      <code>
+       {2, 2, 3}
+      </code>
+      .
+      <ul>
+       <li>
+        And this checks out because
+        <code>
+         2 * 2 * 3 = 12
+        </code>
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <p>
+     How about something like 16? Again, we'll use the sieve to get us the set
+     <code>
+      {2, 3, 5, 7, 11, 13}
+     </code>
+     and start from the bottom.
+    </p>
+    <ul>
+     <li>
+      <code>
+       16 / 2 = 8
+      </code>
+      . So we'll keep 2.
+      <ul>
+       <li>
+        <code>
+         8 % 2 = 0
+        </code>
+        however. Let's factor that out.
+       </li>
+       <li>
+        <code>
+         8 / 2 = 4
+        </code>
+        . So we'll keep 2 (again).
+        <ul>
+         <li>
+          <code>
+           4 % 2 = 0
+          </code>
+          however. Let's factor that out.
+         </li>
+         <li>
+          <code>
+           4 / 2 = 2
+          </code>
+          . So we'll keep 2 (again).
+         </li>
+         <li>
+          <code>
+           2 % 2 = 0
+          </code>
+          however. Let's factor that out.
+          <ul>
+           <li>
+            <code>
+             2 / 2 = 1
+            </code>
+            . So we'll keep 2 (again).
+           </li>
+           <li>
+            <code>
+             1 % 2 = 1
+            </code>
+            . So we would move onto testing the next prime, 3.
+           </li>
+           <li>
+            <code>
+             3 * 3 &gt; 1
+            </code>
+            though. We can skip factoring this.
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </li>
+     <li>
+      Combining the factors, we get
+      <code>
+       {2, 2, 2, 2}
+      </code>
+      .
+      <ul>
+       <li>
+        And this checks out because
+        <code>
+         2 * 2 * 2 * 2 = 4 * 4 = 16
+        </code>
+        .
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <p>
+     This algorithm is known as
+     <a href="https://en.wikipedia.org/wiki/Trial_division">
+      Trial Division
+     </a>
+     . It's a fitting name given that you just keep testing numbers to see what works out until you can't factor anymore.
+    </p>
+    <h2>
+     Enough with this tedious madness! Bring me the code!
+    </h2>
+    <p>
+     <a href="https://github.com/pseudoramble/hundred-projects/blob/master/f%23/Numbers/prime-factors.fsx">
+      Here's my way of trying to implement Trail Division in F#
+     </a>
+     . The essential machinery is as follows:
+    </p>
+    <pre><code>let rec path a b steps tests =
+    if a % b = 0
+    then path (a/b) b (b :: steps) tests
+    else
+        match tests with
+            | x :: xs -&gt; if x * x &gt; a then a :: steps else path a x steps xs
+            | [] -&gt; a :: steps
+</code></pre>
+    <p>
+     <strong>
+      A quick breakdown of the code above
+     </strong>
+     :
+    </p>
+    <p>
+     In this function,
+     <code>
+      a
+     </code>
+     is the numerator,
+     <code>
+      b
+     </code>
+     is the denominator. In addition,
+     <code>
+      steps
+     </code>
+     records the denominator values that pan out, while
+     <code>
+      tests
+     </code>
+     hold our prime numbers to work through.
+    </p>
+    <ol>
+     <li>
+      First, check if
+      <code>
+       a
+      </code>
+      is divisible by
+      <code>
+       b
+      </code>
+      .
+      <ol>
+       <li>
+        If it is, repeat this function replacing
+        <code>
+         a
+        </code>
+        with
+        <code>
+         a/b
+        </code>
+        .
+       </li>
+      </ol>
+     </li>
+     <li>
+      Otherwise, look for the next prime to test.
+      <ol>
+       <li>
+        If
+        <code>
+         x * x
+        </code>
+        (the next prime squared) is larger than the current
+        <code>
+         a
+        </code>
+        value, save
+        <code>
+         a
+        </code>
+        as the last step in this branch.
+       </li>
+       <li>
+        Otherwise, repeat this function replacing
+        <code>
+         b
+        </code>
+        with
+        <code>
+         x
+        </code>
+        and
+        <code>
+         tests
+        </code>
+        with the primes NOT including
+        <code>
+         x
+        </code>
+        .
+       </li>
+      </ol>
+     </li>
+    </ol>
+    <p>
+     There are some separate small checks the code does outside of this before hand, but they aren't super important to the core of this functionality.
+    </p>
+    <p>
+     Embedded in the code are a few quick unit tests. I've used a variety of online tools to try and validate that the results are correct that exist in the file (and other random samples).
+    </p>
    </article>
    <nav>
     <span class="other-entries-title">
