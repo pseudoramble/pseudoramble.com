@@ -7,8 +7,8 @@ import soup_utils
 import functools
 
 def initialize_view(entry_markup, template_markup):
-    temp_view = BeautifulSoup(entry_markup)
-    view = BeautifulSoup(template_markup)
+    temp_view = BeautifulSoup(entry_markup, "lxml")
+    view = BeautifulSoup(template_markup, "lxml")
 
     view.find('article').clear()
     contents = temp_view.find('body').contents
@@ -26,7 +26,7 @@ def store_view(view, filename):
 def add_previous_entries(view, prev_entries):
     for prev_entry in prev_entries:
         with prev_entry.open() as prev_entry_fd:
-            prev_soup = BeautifulSoup(prev_entry_fd.read())
+            prev_soup = BeautifulSoup(prev_entry_fd.read(), "lxml")
             title = prev_soup.find('div', class_='article-header').string
             
         link = view.new_tag('a', href=prev_entry.name)
@@ -58,9 +58,22 @@ def change_dates(view, is_new_entry):
     dates_node.append(modified_node)
     view.find('article').insert(1, dates_node)
 
+def update_head_tag(view):
+    entry_title = view.find('div', class_='article-header').string.strip()
+    text = "pseudoramble | %s" % entry_title
+
+    title_tag = view.new_tag('title')
+    title_tag.string = text
+    
+    description_tag = view.new_tag('meta', content=text)
+    description_tag['name'] = "description"
+    
+    view.find('head').append(title_tag)
+    view.find('head').append(description_tag)
+    
 def initialize_index_view(index_filename):
     with open(index_filename) as index_file_fd:
-        return BeautifulSoup(index_file_fd.read())
+        return BeautifulSoup(index_file_fd.read(), "lxml")
 
 def set_latest_blog_entry(index_view, url):
     blog_entry_link = index_view.find(id='blog_entry_link')
@@ -89,15 +102,17 @@ if len(sys.argv) > 3:
         entry_markup = input_fd.read()
         template_markup = template_fd.read()
 
+    ## Here we'll assemble all of the junk related to the entry itself
     entry_view = initialize_view(entry_markup, template_markup)
-
-    print(prev_entries)
-    
-    add_previous_entries(entry_view, prev_entries)
+    #add_previous_entries(entry_view, prev_entries)
     change_dates(entry_view, is_new_entry)
+    update_head_tag(entry_view)
+    # Last step is to save what you've done!
     store_view(entry_view, output_filename)
 
+    ## Here we'll put together the index stuff
     entry_url = "blog/entry/%s" % output_file_path.name
     index_view = initialize_index_view(index_filename)
     set_latest_blog_entry(index_view, entry_url)
+    # Last step is to save what you've done!
     store_view(index_view, index_filename)
