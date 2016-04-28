@@ -1,0 +1,189 @@
+body {
+    font: 100% sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    background: #dcddd8;
+    color: #354b5e;
+}
+
+img, embed, object, video {
+    max-width: 100%;
+}
+
+header {
+    display: block;
+    min-height: 75px;
+    background: #D74B4B;
+    padding: 10px;
+    font-size: 2.2em;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    min-height: 50px;
+    margin: 10px;
+    background-color: #354b5e;
+}
+
+nav > .previous-entries {
+    font-size: 0.8em;
+    margin: 0px;
+    padding: 10px 0px 0px 10px;
+    list-style: none;
+}
+
+nav > .previous-entries li {
+    padding: 3px;
+}
+
+nav > .other-entries-title {
+    font-weight: 800;
+    font-size: 1.3em;
+}
+
+nav.index {
+    background-color: #354b5e;
+    color: #dcddd8;
+    display: -webkit-fix;
+    display:        flex;
+    -webkit-flex-flow: row;
+    flex-flow: row;
+}
+
+nav.index span {
+    flex: auto;
+    text-align: center;
+    font-size: 1.8em;
+}
+
+h2 {
+    font-size: 1.4em;
+}
+
+h4 {
+    font-size: 1.2em;
+    margin: 1.5em 0.5em 0.3em 0.1em;
+}
+
+p {
+    margin: 0.5em;
+}
+
+#main {
+    min-height: 800px;
+    padding: 0px;
+    display: -webkit-flex;
+    display:         flex;
+    -webkit-flex-flow: row;
+    flex-flow: row;
+}
+
+nav a {
+    color: inherit;
+}
+
+nav.index a {
+    text-decoration: none;
+}
+
+#main > article {
+    padding: 10px;
+    background: #dcddd8;
+    -webkit-flex: 3 1 80%;
+    flex: 3 1 80%;
+    -webkit-order: 2;
+    order: 2;
+}
+
+#main > nav {
+    padding: 5px;
+    background: #475f77;
+    color: #dcddd8;
+    -webkit-flex: 1 6 20%;
+    flex: 1 6 20%;
+    -webkit-order: 1;
+    order: 1;
+}
+
+.article-header {
+    padding: 5px;
+    font-weight: 800;
+    font-size: 1.9em;
+}
+
+.label {
+    font-weight: bold;
+    font-size: 1.05em;
+}
+
+.quotation {
+    display: block;
+    font-size: 1.4em;
+    font-style: italic;
+    padding: 15px;
+}
+
+.centered {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.small {
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+.hidden {
+    display: none;
+}
+
+.dates span {
+    font-size: 0.65em;
+    padding: 0 0 0 5px;
+}
+
+.footer-icon {
+    width: 32px;
+    height: 32px;
+    margin-left: 20px;
+}
+
+@media all and (max-width: 768px) {
+    body {
+        font-size: 90%;
+    }
+    
+    #main, #page {
+        -webkit-flex-flow: column;
+        flex-flow: column;
+    }
+
+    #main > article, #main > nav, #main > aside {
+        /* Return them to document order */
+        -webkit-order: 0;
+        order: 0;
+    }
+    
+    #main > nav, header, footer {
+        min-height: 50px;
+        max-height: 150px;
+    }
+    
+    nav > .previous-entries li {
+        list-style-type: none;
+        text-decoration: underline;
+    }
+
+    nav.index {
+        -webkit-flex-flow: column;
+        flex-flow: column;
+    }
+}
