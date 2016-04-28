@@ -8,7 +8,7 @@ No, I don't accept pull requests here :)
 TODO
 -------------------------
   * Fix the header to actually link back to the index.
-  * Add a better description to the index.
+  * [DONE] Add a better description to the index.
       * "Featured Items"
       * Social Media/Contact buttons?
   * Add in some special handling of the /blog route.
@@ -18,4 +18,5 @@ TODO
       * Another potential fix - Update the web server to redirect to newest entry.
   * Add in more "official" resume (PDF or otherwise).
   * Convert blog to use the assets/site.css stylesheet (it currently uses its own copy).
-  * Convert wholte site to use Sass or something else.
+  * Convert whole site to use Sass or something else.
+  * Setup Google Analytics.
