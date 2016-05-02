@@ -175,6 +175,11 @@ nav.index a {
     margin-left: -20px;
 }
 
+.index-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 @media all and (max-width: 768px) {
     body {
         font-size: 90%;
