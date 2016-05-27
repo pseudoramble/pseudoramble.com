@@ -6,6 +6,11 @@ import sys
 import soup_utils
 import functools
 
+def _grab_title_(view):
+    entry_div = view.find('div', class_='article-header')
+    
+    return ' '.join([string for string in entry_div.stripped_strings])
+
 def initialize_view(entry_markup, template_markup):
     temp_view = BeautifulSoup(entry_markup, "lxml")
     view = BeautifulSoup(template_markup, "lxml")
@@ -27,7 +32,7 @@ def add_previous_entries(view, prev_entries):
     for prev_entry in prev_entries:
         with prev_entry.open() as prev_entry_fd:
             prev_soup = BeautifulSoup(prev_entry_fd.read(), "lxml")
-            title = prev_soup.find('div', class_='article-header').string
+            title = _grab_title_(prev_soup)
             
         link = view.new_tag('a', href=prev_entry.name)
         link.string = title
@@ -59,9 +64,9 @@ def change_dates(view, is_new_entry):
     view.find('article').insert(1, dates_node)
 
 def update_head_tag(view):
-    entry_title = view.find('div', class_='article-header').string.strip()
+    entry_title = _grab_title_(view)
     text = "pseudoramble | %s" % entry_title
-
+    
     title_tag = view.new_tag('title')
     title_tag.string = text
     
@@ -104,7 +109,7 @@ if len(sys.argv) > 3:
 
     ## Here we'll assemble all of the junk related to the entry itself
     entry_view = initialize_view(entry_markup, template_markup)
-    #add_previous_entries(entry_view, prev_entries)
+    add_previous_entries(entry_view, prev_entries)
     change_dates(entry_view, is_new_entry)
     update_head_tag(entry_view)
     # Last step is to save what you've done!

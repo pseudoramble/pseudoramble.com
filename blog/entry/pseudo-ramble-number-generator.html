@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="../site.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>
+  <link href="../rainbow-style.css" rel="stylesheet" type="text/css"/>
+  <script src="../rainbow-custom.min.js">
+  </script>
+  <title>
+   pseudoramble | A Pseudo Ramble Random Number Generator
+  </title>
+  <meta content="pseudoramble | A Pseudo Ramble Random Number Generator" name="description"/>
+ </head>
+ <body>
+  <header>
+   Pseudo Ramble
+  </header>
+  <div id="main">
+   <article>
+    <div class="article-header">
+     A Pseudo
+     <del>
+      Ramble
+     </del>
+     Random Number Generator
+    </div>
+    <div class="dates">
+     <span>
+      Published on 2016-05-26
+     </span>
+     <span>
+      Modified on 2016-05-26
+     </span>
+    </div>
+    <p>
+     You're a few steps away from the final battle in FFVII. Just a few more platforms to traverse until you reach the last Jenova fight.
+    </p>
+    <p>
+     <img alt='Also known as "Please no more fights before the last fight before the last fight!"' src="http://vignette2.wikia.nocookie.net/finalfantasy/images/b/b9/Battlebg-ffvii-northerncave-finaldescent.png/revision/latest?cb=20111201123658" title=""/>
+    </p>
+    <p>
+     You just pray to some Playstation developer to not make you fight again. When you inevitably have an encounter, maybe you wonder why Playstation developers hate you. Or perhaps you wonder "how did they decide to put me into a fight now?!"
+    </p>
+    <p>
+     You've once again run into
+     <em>
+      pseudo-random
+     </em>
+     chance, created by a pseudo random number generator (PRNG). This is a process to create numbers where a sufficient sample pass set of statistical tests that say a process creates "random-looking enough" numbers.
+    </p>
+    <p>
+     When it comes to PRNG, there doesn't seem to be an end to the amount of knowledge and information one can gather about it. Statistical tests, prime/coprime constants, Mersenne twister, cycles. And the list goes on.
+    </p>
+    <p>
+     So, where's the simpleton of a developer to start?
+    </p>
+    <p>
+     I started with a
+     <a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">
+      linear congruential generator
+     </a>
+     . It's a recursive function (recurrence relation in math lingo) that is defined like this:
+    </p>
+    <p>
+     <img alt="The LCG Recurrence Relation" src="../images/linear-congruential-generator-recurrence-relation.png" title=""/>
+    </p>
+    <p>
+     The constants
+     <code>
+      a
+     </code>
+     <code>
+      c
+     </code>
+     and
+     <code>
+      m
+     </code>
+     in this formula are defined internally by the generator.
+     <code>
+      X_n-1
+     </code>
+     is the previously generated value, calculated from each step of this process. So we just feed our last value through this system each time we need a new value, and we have what might kinda, sorta, may be a pseudo-random number!
+    </p>
+    <p>
+     By the way, the first value in the sequence
+     <code>
+      X_0
+     </code>
+     is called the seed. For those with programming experience, this is
+     <code>
+      12345
+     </code>
+     in (C# lingo)
+     <code>
+      var rng = new Random(12345)
+     </code>
+     . This means we can start the sequence off with the same value each time. It also enables us to generate the same sequence on multiple runs of a program, which is handy for testing.
+    </p>
+    <p>
+     Let's see if we can't build something like this in F#. My first crack at it was this:
+    </p>
+    <pre><code data-language="haskell">let prng seed a c m =
+    (a * seed + c) % m)
+</code></pre>
+    <p>
+     That should do it. In a shoddy way, this is "all you need" if you just compose
+     <code>
+      prng
+     </code>
+     with itself a bunch of times:
+    </p>
+    <pre><code data-language="haskell">let prng seed a c m =
+    (a * seed + c) % m)
+
+let seed, a, c, m = (1024, 123, 233, 312)
+seed                       (* 1024 *)
+|&gt; (fun x -&gt; prng x a c m) (* 137 *)
+|&gt; (fun x -&gt; prng x a c m) (* 236 *)
+|&gt; (fun x -&gt; prng x a c m) (* 245 *)
+|&gt; (fun x -&gt; prng x a c m) (* 104 *)
+</code></pre>
+    <p>
+     Right? Right. Let's not go down that road.
+    </p>
+    <p>
+     While kind of worthless, the first stab at this did make me realize that this is recursive "on demand." We just apply the same function repeatedly, but only apply it when we want the next value.
+    </p>
+    <p>
+     In other words, it feels like a
+     <code>
+      Seq
+     </code>
+     but with a twist. We either have to:
+    </p>
+    <ol>
+     <li>
+      Limit the output to ensure we don't just run indefinitely.
+     </li>
+     <li>
+      Be lazy.
+     </li>
+    </ol>
+    <p>
+     I think it's safe to say that going gets tough, the tough get lazy. I should look this up, but eh.
+    </p>
+    <p>
+     To be lazy with a
+     <code>
+      Seq
+     </code>
+     we need to rely on
+     <a href="https://github.com/fsharp/fsharp/blob/37a100b7caafde0f4df5a1924c9f65f4a18277a8/src/fsharp/FSharp.Core/seq.fs#L884">
+      <code>
+       Seq.delay
+      </code>
+     </a>
+     and recursion:
+    </p>
+    <ol>
+     <li>
+      <code>
+       Seq.delay
+      </code>
+      makes a sequence where the iterator that defines it is continually "replaced" with a new
+      <code>
+       Seq
+      </code>
+      iterator. That new
+      <code>
+       Seq
+      </code>
+      is defined by the function passed into
+      <code>
+       Seq.delay
+      </code>
+      .
+     </li>
+     <li>
+      on each request to the RNG, what
+      <code>
+       Seq
+      </code>
+      should replace it? Itself, of course! So we say that the
+      <code>
+       Seq
+      </code>
+      binding is defined recursively.
+     </li>
+    </ol>
+    <p>
+     Here's what I came up with:
+    </p>
+    <pre><code data-language="haskell">let buildGenerator seed a c m =
+    let foldfn cur =
+        (a * cur + c) % m
+
+    let rec generator =
+        Seq.append [seed] (Seq.delay (fun () -&gt; Seq.map foldfn generator))
+
+    generator
+</code></pre>
+    <p>
+     The big points here to getting this to work in a lazy fashion:
+    </p>
+    <ol>
+     <li>
+      We start with a concrete value (the seed in the RNG's case).
+     </li>
+     <li>
+      We define our binding for the generator recursively.
+     </li>
+     <li>
+      We use
+      <code>
+       Seq.delay
+      </code>
+      to create the next iterator to use.
+     </li>
+    </ol>
+    <p>
+     What I would call a more elegant implementation
+     <a href="https://github.com/pseudoramble/hundred-projects/blob/0540f3c39333ec2416011942b4ff58a50acce34a/f%23/Numbers/prng.fsx">
+      can be found here
+     </a>
+     but these two Sequences do the same thing.
+    </p>
+    <p>
+     And now we can use a new RNG like so:
+    </p>
+    <pre><code data-language="haskell">let seed, a, c, m = (1024, 123, 233, 312)
+let rng = buildGenerator seed a c m
+Seq.head (Seq.tail (Seq.tail (Seq.tail rng))) (* 245 *)
+</code></pre>
+    <p>
+     Yikes, but neat nevertheless. We now need to find a way to interact with this thing more managably. Next time, we'll take a look at building a module for interacting with an PRNG we've created.
+    </p>
+   </article>
+   <nav>
+    <span class="other-entries-title">
+     Other Entries
+    </span>
+    <ul class="previous-entries" id="previous-entries-list">
+     <li>
+      <a href="goofing-off-with-prime-numbers-part-2.html">
+       Goofing off With Prime Numbers Part 2 - Prime Factorization
+      </a>
+     </li>
+     <li>
+      <a href="goofing-off-with-prime-numbers-part-1.html">
+       Goofing off With Prime Numbers Part 1 - The Sieve of Eratosthenes
+      </a>
+     </li>
+     <li>
+      <a href="should-i-go-to-dunkin-donuts-today.html">
+       Should I Go To Dunkin Donuts Today?
+      </a>
+     </li>
+     <li>
+      <a href="python-special-methods.html">
+       Python's Special Methods
+      </a>
+     </li>
+     <li>
+      <a href="understanding-react-via-a-refactoring.html">
+       Understanding React - A Refactoring
+      </a>
+     </li>
+    </ul>
+   </nav>
+  </div>
+ </body>
+</html>

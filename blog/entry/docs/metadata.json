@@ -1,0 +1,30 @@
+{
+  "entry-id": {
+    "homemade-crunchwraps-a-tutorial": 0,
+    "workbench-setup-part-1": 1,
+    "consider-using-collection-functions": 2,
+    "diagonol-yer-cube": 3,
+    "how-I-run-this-blog": 4,
+    "the-briefest-introduction-to-beautifulsoup": 5,
+    "osx-recovery-mode-tips": 6,
+    "understanding-react-via-a-refactoring": 7,
+    "python-special-methods": 8,
+    "should-i-go-to-dunkin-donuts-today": 9,
+    "goofing-off-with-prime-numbers-part-1": 10,
+    "goofing-off-with-prime-numbers-part-2": 11
+  },
+  "order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ]
+}
