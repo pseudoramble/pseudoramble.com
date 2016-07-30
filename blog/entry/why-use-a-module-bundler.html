@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link href="../site.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>
+  <link href="../rainbow-style.css" rel="stylesheet" type="text/css"/>
+  <script src="../rainbow-custom.min.js">
+  </script>
+  <title>
+   pseudoramble | Why use a module bundler (for Javascript)?
+  </title>
+  <meta content="pseudoramble | Why use a module bundler (for Javascript)?" name="description"/>
+ </head>
+ <body>
+  <header>
+   Pseudo Ramble
+  </header>
+  <div id="main">
+   <article>
+    <div class="article-header">
+     Why use a module bundler (for Javascript)?
+    </div>
+    <div class="dates">
+     <span>
+      Published on 2016-07-30
+     </span>
+     <span>
+      Modified on 2016-07-30
+     </span>
+    </div>
+    <p>
+     Trying to learn a new set of tools is a daunting task. There's a lot of moving parts to a fancy setup, especially with module bundlers like Webpack. Grabbing a boilerplate is easy, but also confusing if something doesn't work.
+     <a href="https://github.com/gaearon/react-makes-you-sad">
+      React may even make you sad
+     </a>
+     after trying it out.
+    </p>
+    <p>
+     I decided I had to go back and look again. Why do I even want Webpack (or Browserify, or Rollup)?
+    </p>
+    <p>
+     I wanted to run a modern-ish setup with the following features:
+    </p>
+    <ul>
+     <li>
+      ES6 features including modules (Babel)
+     </li>
+     <li>
+      npm packages
+     </li>
+     <li>
+      Avoid a moduler bundler as long as I could
+     </li>
+    </ul>
+    <p>
+     So I started off with a new project. Typical
+     <code>
+      npm init
+     </code>
+     and
+     <code>
+      git init
+     </code>
+     kind of stuff. Then for a few packages:
+    </p>
+    <pre><code>npm install babel-cli babel-preset-es2015 babel-preset-react
+</code></pre>
+    <p>
+     Okay, cool. Babel + some preset plugins. So now how do we use Babel?
+     <code>
+      babel-cli
+     </code>
+     helps us there. It could allow you to configure a compilation step in your
+     <code>
+      package.json
+     </code>
+     maybe like this:
+    </p>
+    <pre><code data-language="javascript">...
+"scripts": {
+    "compile": "babel src/ --out-file dist/app.js"
+}
+</code></pre>
+    <p>
+     Now
+     <code>
+      npm run compile
+     </code>
+     will create a newly compiled-and-concatenated JS file. With a
+     <code>
+      .babelrc
+     </code>
+     file created and
+     <code>
+      babel-preset-*
+     </code>
+     installed, I thought I was all settled.
+    </p>
+    <p>
+     Well, kinda. Here's the output of this on a single file written in ES6 using React:
+    </p>
+    <pre><code data-language="javascript">import React from 'react';
+import X from './x.jsx';
+
+export default (function (_ref) {
+  var moves = _ref.moves;
+
+  var eachStep = moves.length &gt; 0 ? moves.map(function (action, i) {
+    return React.createElement(
+      "div",
+      { key: i },
+      (action.player === "user" ? "You" : "The computer") + " removed " + action.move + " sticks"
+      );
+    }) : [React.createElement(
+      "div",
+      null,
+      "Begin when you're ready!"
+  )];
+
+  return React.createElement(
+    "div",
+    { style: { "margin-top": "15px" } },
+    eachStep
+  );
+});
+</code></pre>
+    <p>
+     Problems galore!
+    </p>
+    <ul>
+     <li>
+      There's this mystical
+      <code>
+       react
+      </code>
+      module we don't know about.
+     </li>
+     <li>
+      Speaking of which, why am I still importing the local module
+      <code>
+       X
+      </code>
+      ?
+     </li>
+     <li>
+      Speaking of which, modules shouldn't be showing up anymore! This won't load in a browser at all!
+     </li>
+    </ul>
+    <p>
+     Some of these things are Babel plugins,
+     <a href="https://babeljs.io/docs/plugins/">
+      which you can find here
+     </a>
+     . Which is cool.
+    </p>
+    <p>
+     Some of these things can't be done with Babel alone. Like
+     <code>
+      npm
+     </code>
+     modules. It won't be aware of them, or define them as globals for you (AFAIK there isn't a plugin to do this). So you can:
+    </p>
+    <ul>
+     <li>
+      Include the globals you need in your
+      <code>
+       index.html
+      </code>
+      header
+     </li>
+     <li>
+      Attach modules to the
+      <code>
+       window
+      </code>
+      object where needed
+     </li>
+     <li>
+      Run a module bundler, which supports these things (and more) through plugins
+     </li>
+    </ul>
+    <p>
+     So yeah, module bundlers are helpful in larger setups, even with a bit of a learning curve/some headaches.
+    </p>
+    <p>
+     I highly recommend just trying to start from scratch and work your way through the setup of a module bundler. No boilerplates, and no copying configs from elsewhere.
+     <a href="https://github.com/pseudoramble/nim">
+      Here's an example I tried that with
+     </a>
+     using Rollupjs.
+    </p>
+   </article>
+   <nav>
+    <span class="other-entries-title">
+     Other Entries
+    </span>
+    <ul class="previous-entries" id="previous-entries-list">
+     <li>
+      <a href="pseudo-ramble-number-generator.html">
+       A Pseudo Ramble Random Number Generator
+      </a>
+     </li>
+     <li>
+      <a href="goofing-off-with-prime-numbers-part-2.html">
+       Goofing off With Prime Numbers Part 2 - Prime Factorization
+      </a>
+     </li>
+     <li>
+      <a href="goofing-off-with-prime-numbers-part-1.html">
+       Goofing off With Prime Numbers Part 1 - The Sieve of Eratosthenes
+      </a>
+     </li>
+     <li>
+      <a href="should-i-go-to-dunkin-donuts-today.html">
+       Should I Go To Dunkin Donuts Today?
+      </a>
+     </li>
+     <li>
+      <a href="python-special-methods.html">
+       Python's Special Methods
+      </a>
+     </li>
+    </ul>
+   </nav>
+  </div>
+ </body>
+</html>
