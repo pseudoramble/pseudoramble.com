@@ -22,8 +22,13 @@ header {
     order: 2;
 }
 
+.other-entries-title {
+    display: block;
+}
+
 /* Styling Stuff */
 body {
+    margin: 0;
     font: 100% sans-serif;
     font-family: 'Open Sans', sans-serif;
     background: #dcddd8;
@@ -81,10 +86,6 @@ h4 {
     margin: 1.5em 0.5em 0.3em 0.1em;
 }
 
-p {
-    margin: 0.5em;
-}
-
 #main {
     min-height: 800px;
     padding: 0px;
@@ -101,6 +102,7 @@ nav.index a {
 #main > article {
     padding: 10px;
     background: #dcddd8;
+    line-height: 1.4em;
 }
 
 #main > nav {
@@ -109,10 +111,15 @@ nav.index a {
     color: #dcddd8;
 }
 
+#main > article > p {
+    padding: .2em 0 .2em 0;
+}
+
 .article-header {
     padding: 5px;
     font-weight: 800;
     font-size: 1.9em;
+    line-height: initial;
 }
 
 /* Special content tweaks to be used when needed */
@@ -143,8 +150,12 @@ nav.index a {
     display: none;
 }
 
+/* Specific device tweaks */
 @media all and (min-width: 769px) {
-    
+    #main > article, #main > nav > * {
+        width: 768px;
+        margin: 0 auto;
+    }
 }
 
 @media all and (max-width: 768px) {
@@ -154,7 +165,6 @@ nav.index a {
         
     #main > nav, header, footer {
         min-height: 50px;
-        max-height: 150px;
     }
     
     nav > .previous-entries li {

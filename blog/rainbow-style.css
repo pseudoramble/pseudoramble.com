@@ -17,6 +17,7 @@ pre {
     color: #000;
     font-size: 0.89em;
     line-height: 16px;
+    overflow: auto;
 }
 
 pre, code {
