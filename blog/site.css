@@ -1,3 +1,28 @@
+/* Layout Stuff */
+header {
+    display: block;
+}
+
+#main, #page {
+    -webkit-flex-flow: column;
+    flex-flow: column;
+}
+
+#main > nav {
+    -webkit-flex: 1 6 20%;
+    flex: 1 6 20%;
+    -webkit-order: 2;
+    order: 2;
+}
+
+#main > article {
+    -webkit-flex: 3 1 80%;
+    flex: 3 1 80%;
+    -webkit-order: 2;
+    order: 2;
+}
+
+/* Styling Stuff */
 body {
     font: 100% sans-serif;
     font-family: 'Open Sans', sans-serif;
@@ -10,7 +35,6 @@ img, embed, object, video {
 }
 
 header {
-    display: block;
     min-height: 75px;
     background: #D74B4B;
     padding: 10px;
@@ -36,14 +60,9 @@ nav > .other-entries-title {
 nav.index {
     background-color: #354b5e;
     color: #dcddd8;
-    display: -webkit-fix;
-    display:        flex;
-    -webkit-flex-flow: row;
-    flex-flow: row;
 }
 
 nav.index span {
-    flex: auto;
     text-align: center;
     font-size: 1.8em;
 }
@@ -69,10 +88,6 @@ p {
 #main {
     min-height: 800px;
     padding: 0px;
-    display: -webkit-flex;
-    display:         flex;
-    -webkit-flex-flow: row;
-    flex-flow: row;
 }
 
 nav a {
@@ -86,20 +101,12 @@ nav.index a {
 #main > article {
     padding: 10px;
     background: #dcddd8;
-    -webkit-flex: 3 1 80%;
-    flex: 3 1 80%;
-    -webkit-order: 2;
-    order: 2;
 }
 
 #main > nav {
     padding: 5px;
     background: #475f77;
     color: #dcddd8;
-    -webkit-flex: 1 6 20%;
-    flex: 1 6 20%;
-    -webkit-order: 1;
-    order: 1;
 }
 
 .article-header {
@@ -108,6 +115,7 @@ nav.index a {
     font-size: 1.9em;
 }
 
+/* Special content tweaks to be used when needed */
 .label {
     font-weight: bold;
     font-size: 1.05em;
@@ -135,22 +143,15 @@ nav.index a {
     display: none;
 }
 
+@media all and (min-width: 769px) {
+    
+}
+
 @media all and (max-width: 768px) {
     body {
         font-size: 90%;
     }
-    
-    #main, #page {
-        -webkit-flex-flow: column;
-        flex-flow: column;
-    }
-
-    #main > article, #main > nav, #main > aside {
-        /* Return them to document order */
-        -webkit-order: 0;
-        order: 0;
-    }
-    
+        
     #main > nav, header, footer {
         min-height: 50px;
         max-height: 150px;
@@ -159,10 +160,5 @@ nav.index a {
     nav > .previous-entries li {
         list-style-type: none;
         text-decoration: underline;
-    }
-
-    nav.index {
-        -webkit-flex-flow: column;
-        flex-flow: column;
     }
 }
