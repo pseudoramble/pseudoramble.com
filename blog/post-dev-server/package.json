@@ -1,0 +1,15 @@
+{
+  "name": "post-dev-server",
+  "version": "0.0.1",
+  "description": "A small little development and output server for the blog",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.14.0",
+    "pug": "^2.0.0-beta6"
+  }
+}
