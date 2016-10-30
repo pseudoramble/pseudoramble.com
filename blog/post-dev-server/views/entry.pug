@@ -1,0 +1,15 @@
+html
+  include head.pug
+
+  body
+    header Pseudo Ramble
+
+    div(id="main")
+      article
+        div(class="dates")
+          span(id="published")
+          span(id="modified")
+        include:markdown-it temp.md
+      nav
+        span(class="other-entries-title")
+        ul(id="previous-entries-list" class="previous-entries")
