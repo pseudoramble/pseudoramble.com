@@ -13,3 +13,6 @@ html
       nav
         span(class="other-entries-title")
         ul(id="previous-entries-list" class="previous-entries")
+          each entry in previousEntries
+            li
+              a(href=entry.url) #{entry.title}
