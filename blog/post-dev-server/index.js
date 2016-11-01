@@ -2,11 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const { lookupContent, setupContent } = require('./src/content.js');
 const { before, after } = require('./src/entryHunter.js');
-
-const toLink = entry => ({ 
-  title: entry.name,
-  url: `/blog/entry/${entry.name}.html`
-});
+const { toLink } = require('./src/transformers.js');
 
 const app = express();
 
