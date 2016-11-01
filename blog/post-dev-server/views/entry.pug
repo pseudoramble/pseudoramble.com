@@ -7,8 +7,8 @@ html
     div(id="main")
       article
         div(class="dates")
-          span(id="published")
-          span(id="modified")
+          span(id="published") Published on #{publishedDate},
+          span(id="modified") Modified on #{modifiedDate}
         include:markdown-it temp.md
       nav
         span(class="other-entries-title")

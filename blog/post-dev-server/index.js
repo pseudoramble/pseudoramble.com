@@ -1,7 +1,9 @@
 const express = require('express');
 const fs = require('fs');
+const moment = require('moment');
+
 const { lookupContent, setupContent } = require('./src/content.js');
-const { before, after } = require('./src/entryHunter.js');
+const { afoot, before, after } = require('./src/entryHunter.js');
 const { toLink } = require('./src/transformers.js');
 
 const app = express();
@@ -18,10 +20,14 @@ app.get('/post/:name', (req, res) => {
   const content = lookupContent(entryName);
   const contentStored = setupContent(content);
 
+  const afootEntry = afoot(entryName);
   const previousEntries = before(entryName).map(toLink);
 
+  const publishedDate = moment(afootEntry.created).format('YYYY-MM-DD');
+  const modifiedDate = moment().format('YYYY-MM-DD');
+
   if (contentStored) {
-    res.render('entry', { previousEntries });
+    res.render('entry', { previousEntries, publishedDate, modifiedDate });
   } else {
     res.status(503).send('Content could not setup properly for rendering to occur.');
   }

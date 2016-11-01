@@ -19,9 +19,12 @@ const after = (name, limit=5) => summonEntries({ name, comparator: byOldestFirst
 const latest = (name, limit=5) => summonEntries({});
 const oldest = (name, limit=5) => summonEntries({ comparator: byOldestFirst });
 
+const afoot = (name) => _.find(writtenEntries, { name });
+
 module.exports = {
-  before,
+  afoot,
   after,
+  before,
   latest,
   oldest
 }
