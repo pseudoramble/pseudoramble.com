@@ -1,7 +1,7 @@
 const { readdirSync, statSync, writeFileSync } = require('fs');
 const _ = require('lodash');
 
-const writtenEntries = require('./entries.json');
+const writtenEntries = require('../data/entries.json');
 
 const byNewestFirst = (first, second) => new Date(second.created) - new Date(first.created);
 const byOldestFirst = (first, second) => new Date(first.created) - new Date(second.created);
@@ -32,8 +32,8 @@ const save = (name, entry, content) => {
     });
   }
 
-  writeFileSync(`${__dirname}/entries.json`, JSON.stringify(writtenEntries));
-  writeFileSync(`${__dirname}/../output/${name}.html`, content);
+  writeFileSync(`${__dirname}/../data/entries.json`, JSON.stringify(writtenEntries));
+  writeFileSync(`${__dirname}/../data/dist/${name}.html`, content);
 
   return true;
 };

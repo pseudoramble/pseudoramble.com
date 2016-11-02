@@ -2,5 +2,4 @@ __pycache__/
 #.*#
 .vscode/
 node_modules/
-temp.md
-output/
+__temp.md

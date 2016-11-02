@@ -4,7 +4,7 @@ const moment = require('moment');
 const pug = require('pug');
 
 const { lookupContent, setupContent } = require('./src/content.js');
-const { afoot, after, before, save } = require('./src/entryHunter.js');
+const { afoot, after, before, latest, save } = require('./src/entryHunter.js');
 const { toLink } = require('./src/transformers.js');
 
 const app = express();
@@ -13,16 +13,16 @@ const configureEntry = entryName => {
   const content = lookupContent(entryName);
   const contentStored = setupContent(content);
 
-  const afootEntry = afoot(entryName);
-  const previousEntries = before(entryName).map(toLink);
-
+  const afootEntry = afoot(entryName) || { name: entryName, created: new Date().toISOString() };
+  const previousEntries = afootEntry.modified ? before(entryName) : latest();
+  
   const publishedDate = moment(afootEntry.created).format('YYYY-MM-DD');
   const modifiedDate = moment().format('YYYY-MM-DD');
 
   return {
     contentStored,
     modifiedDate,
-    previousEntries,
+    previousEntries: previousEntries.map(toLink),
     publishedDate
   };
 };

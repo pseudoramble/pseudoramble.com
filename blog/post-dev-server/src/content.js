@@ -1,14 +1,18 @@
 const fs = require('fs');
 
-const entryPath = __dirname + '/../../entry/docs/';
-const tempMarkdownFile = __dirname + '/../views/temp.md';
-const pathTo = name => entryPath + '/' + name + '.md'
+const documentPath = `${__dirname}/../data/docs/`;
+const tempMarkdownFile = `${documentPath}/__temp.md`;
+const pathTo = name => `${documentPath}/${name}.md`;
 
 const lookupContent = name => {
   if (typeof name !== 'string') {
     throw new Error('The name of the content to lookup is bad');
-  } else if (!fs.existsSync(pathTo(name))) {
-    throw new Error('The content file to look up does not exist');
+  } 
+  
+  const markdownFile = pathTo(name);
+
+  if (!fs.existsSync(pathTo(name))) {
+    fs.appendFileSync(markdownFile, '# Your next entry');
   }
 
   return fs.readFileSync(pathTo(name), { encoding: 'utf-8' });
