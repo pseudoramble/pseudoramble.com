@@ -1,4 +1,4 @@
-const { readdirSync, statSync } = require('fs');
+const { readdirSync, statSync, writeFileSync } = require('fs');
 const _ = require('lodash');
 
 const writtenEntries = require('./entries.json');
@@ -15,16 +15,34 @@ const summonEntries = ({name = '', comparator = byNewestFirst, limit = 5}) =>
 
 const before = (name, limit=5) => summonEntries({ name });
 const after = (name, limit=5) => summonEntries({ name, comparator: byOldestFirst });
-
 const latest = (name, limit=5) => summonEntries({});
 const oldest = (name, limit=5) => summonEntries({ comparator: byOldestFirst });
-
 const afoot = (name) => _.find(writtenEntries, { name });
+
+const save = (name, entry, content) => {
+  const location = _.findIndex(writtenEntries, { name });
+
+  if (location > -1) {
+    writtenEntries[location].modified = entry.modifiedDate;
+  } else {
+    writtenEntries.splice(0, 0, {
+      name,
+      created: entry.publishedDate,
+      modified: entry.modifiedDate
+    });
+  }
+
+  writeFileSync(`${__dirname}/entries.json`, JSON.stringify(writtenEntries));
+  writeFileSync(`${__dirname}/../output/${name}.html`, content);
+
+  return true;
+};
 
 module.exports = {
   afoot,
   after,
   before,
   latest,
-  oldest
+  oldest,
+  save
 }
