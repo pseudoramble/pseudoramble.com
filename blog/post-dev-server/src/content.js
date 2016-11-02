@@ -1,8 +1,11 @@
 const fs = require('fs');
+const { startCase } = require('lodash');
 
 const documentPath = `${__dirname}/../data/docs/`;
 const tempMarkdownFile = `${documentPath}/__temp.md`;
+
 const pathTo = name => `${documentPath}/${name}.md`;
+const titleOf = docName => startCase(docName.replace('-', ' '));
 
 const lookupContent = name => {
   if (typeof name !== 'string') {
@@ -12,7 +15,7 @@ const lookupContent = name => {
   const markdownFile = pathTo(name);
 
   if (!fs.existsSync(pathTo(name))) {
-    fs.appendFileSync(markdownFile, '# Your next entry');
+    fs.appendFileSync(markdownFile, `# ${titleOf(name)}`);
   }
 
   return fs.readFileSync(pathTo(name), { encoding: 'utf-8' });
