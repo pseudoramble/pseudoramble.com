@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "jstransformer-markdown-it": "^2.0.0",
     "lodash": "^4.16.4",

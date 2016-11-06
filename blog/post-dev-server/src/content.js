@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { startCase } = require('lodash');
 
-const documentPath = `${__dirname}/../data/docs/`;
+const documentPath = process.env.DOCS_PATH || `${__dirname}/../data/docs/`;
 const tempMarkdownFile = `${documentPath}/__temp.md`;
 
 const pathTo = name => `${documentPath}/${name}.md`;

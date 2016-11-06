@@ -3,6 +3,8 @@ const _ = require('lodash');
 
 const writtenEntries = require('../data/entries.json');
 
+const outputDir = process.env.OUTPUT_PATH || `${__dirname}/../data/dist`;
+
 const byNewestFirst = (first, second) => new Date(second.created) - new Date(first.created);
 const byOldestFirst = (first, second) => new Date(first.created) - new Date(second.created);
 
@@ -33,7 +35,7 @@ const save = (name, entry, content) => {
   }
 
   writeFileSync(`${__dirname}/../data/entries.json`, JSON.stringify(writtenEntries));
-  writeFileSync(`${__dirname}/../data/dist/${name}.html`, content);
+  writeFileSync(`${outputDir}/${name}.html`, content);
 
   return true;
 };
