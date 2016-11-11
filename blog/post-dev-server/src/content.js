@@ -2,7 +2,7 @@ const fs = require('fs');
 const { startCase } = require('lodash');
 
 const documentPath = process.env.DOCS_PATH || `${__dirname}/../data/docs/`;
-const tempMarkdownFile = `${documentPath}/__temp.md`;
+const tempMarkdownFile = `${__dirname}/../data/docs/__temp.md`;
 
 const pathTo = name => `${documentPath}/${name}.md`;
 const titleOf = docName => startCase(docName.replace('-', ' '));

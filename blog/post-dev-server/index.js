@@ -18,8 +18,10 @@ const configureEntry = entryName => {
   const afootEntry = afoot(entryName) || { name: entryName, created: new Date().toISOString() };
   const previousEntries = afootEntry.modified ? before(entryName) : latest();
   
-  const publishedDate = moment(afootEntry.created).format('YYYY-MM-DD');
-  const modifiedDate = moment().format('YYYY-MM-DD');
+  const createdDate = moment(afootEntry.created);
+
+  const publishedDate = createdDate.format('YYYY-MM-DD');
+  const modifiedDate = createdDate.isSame(moment(), 'day') ? undefined : moment().format('YYYY-MM-DD');
 
   return {
     contentStored,
@@ -30,7 +32,7 @@ const configureEntry = entryName => {
 };
 
 app.set('view engine', 'pug');
-app.use(express.static(__dirname + '/../../assets'));
+app.use(express.static(__dirname + '/../../'));
 
 app.get('/', (req, res) => {
   res.render('index', { title: 'le index' });
@@ -81,5 +83,5 @@ app.get('/post/:name/commit', (req, res) => {
 })
 
 app.listen(3000, () => {
-  console.warn('listening on localhost:3000');
+  console.warn('listening on http://localhost:3000');
 });

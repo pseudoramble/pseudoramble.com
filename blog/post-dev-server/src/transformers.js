@@ -1,5 +1,5 @@
 const toLink = entry => ({ 
-  title: entry.name,
+  title: entry.title,
   url: `/blog/entry/${entry.name}.html`
 });
 
