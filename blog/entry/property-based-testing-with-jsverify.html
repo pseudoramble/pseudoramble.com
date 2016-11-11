@@ -1,0 +1,93 @@
+<html><head><title></title><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/blog.css" type="text/css" media="screen"/><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/><link href="/assets/css/rainbow-style.css" rel="stylesheet" type="text/css"/><script src="/assets/js/rainbow-custom.min.js"></script><script src="/assets/js/analytics.js"></script></head><body><header>Pseudo Ramble</header><div id="main"><article><div class="dates"><span id="published">Published on 2016-11-10</span></div><h1>Property-Based Testing With JSVerify</h1>
+<p>Something that's easy to forget in the world of software development is that testing is a major time investement.
+Testing has a variety of meanings depending on the context of course. But here we mean attempting to show software
+correctness by exercising code.</p>
+<p>I've recently been poking around at a form of testing known as <em>property-based testing</em>.</p>
+<h3>What's a property-based test?</h3>
+<p>To quote the website <a href="http://blog.jessitron.com/2013/04/property-based-testing-what-is-it.html">Abstractivate</a>:</p>
+<h5>&quot;Property-based tests make statements about the output of your code based on the input, and these statements are verified for many different possible inputs.&quot;</h5>
+<p>Property-based looks at the input &amp; output of a function to describe details about the output itself.
+A description is provided for the parameters needed for that function. Test data is then
+generated from these descriptions, which helps tease out harder-to-find scenarios.</p>
+<h3>In comparison with unit tests</h3>
+<p>Unit tests <em>focus on the results of one-example at a time</em>. They may also use specific implementation details
+of the code to check its functionality.</p>
+<p>Let's take a look at <code>median(values: number): number</code>:</p>
+<pre><code>it('is the second number when a list of size 3 is given', () =&gt; {
+  expect(median([3, 6, 1024])).to.equal(6);
+});
+
+it('is between the 1st and 2nd number when a list of size 2 is given', () =&gt; {
+  expect(median([2, 4])).to.equal(3);
+});
+
+it('is still the midpoint of numbers regardless of order', () =&gt; {
+  expect(median([1024, 12, 144444, 13, 1924, 169, 4])).to.equal(169);
+});
+</code></pre>
+<p>These are not entirely random examples, as we're exercising the length and values of the list itself. I'm
+trying to check that we're always getting the middle-most element of the list, or the average if not possible.</p>
+<h3>Switched to be property-based (kinda)</h3>
+<p>Property tests <em>focus on the descriptions using many examples</em>. These avoid using implementation details
+to check the functionality.</p>
+<p>One property I thought of was that we're trying to say that the median is less than at least half of these elements.
+This seems a lot closer to what I wanted to discover about the <code>median</code> function.</p>
+<p>Here's the revised property-based version:</p>
+<pre><code>it('is &lt;= at least half of the numbers in the set', () =&gt; {
+  const test = jsc.check(jsc.forall('nearray nat', values =&gt; {
+    const med = median(values);
+    return values.filter(v =&gt; v &lt;= med).length &gt;= values.length / 2;
+  }));
+
+  expect(test).to.be.true;
+});
+</code></pre>
+<p>Some notes on what this is:</p>
+<ol>
+<li>JSVerify helps describes what data to generate to work this property.
+<ol>
+<li><code>jsc.forall('nearray nat')</code> says that for all non-empty lists of natural numbers.</li>
+</ol>
+</li>
+<li>The implementation of the property test returns if that particular case matches the property.
+<ol>
+<li>This function is invoked with different values a multitude of times (100 by default).</li>
+</ol>
+</li>
+</ol>
+<p>Hopefully the contrast is a bit more clear now. <strong>Properties are details we want to hold true for <em>any</em>
+inputs that meet the acceptable criteria.</strong></p>
+<p>We can make this less wordy by using <code>jsc.property</code> which is takes away some boilerplate.</p>
+<pre><code>jsc.property('is &lt;= at least half of the numbers in the set', 'nearray nat', values =&gt; {
+  const med = median(values);
+  return values.filter(v =&gt; v &lt;= med).length &gt;= values.length / 2;
+});
+</code></pre>
+<h3>What are useful properties to test for?</h3>
+<p>This depends on the scenario. In the code I've been using this in, some mathematical ones have
+come in handy. These are great because we can look them up and implement them online.
+For more broad ideas, <a href="http://fsharpforfunandprofit.com/posts/property-based-testing-2/">F# for fun and profit</a>
+provides a great set of examples to explore.</p>
+<p>Let's try an example of using idempotence! Idempotence says that applying a function more than once is
+the same as applying it once.</p>
+<p>The mode of a set of numbers (the most frequent elements in a list) is an example of that:</p>
+<pre><code>describe('the mode of a set of numbers', () =&gt; {
+  jsc.property('is idempotent', 'nearray nat', v =&gt; {
+    const mmm = mode(mode(v));
+    const m = mode(v);
+
+    return m.every(x =&gt; mmm.includes(x));
+  });
+</code></pre>
+<h3>What is this <code>jsc</code> thing you're using?</h3>
+<p>This is from the <a href="https://github.com/jsverify/jsverify">JSVerify</a> library. They provide few examples,
+but plenty of details about how the library can work. They provide functionality such as:</p>
+<ul>
+<li>Ways to describe the function's data (and a DSL with that).</li>
+<li>Ways to generate different kinds of data.</li>
+<li>Ways to find the minimum input from a failed example.</li>
+</ul>
+<p>I'm still working my way through what they offer and learning. But the functionality I've shown
+here have been good enough to cover my example project,
+<a href="https://github.com/pseudoramble/numberenos/tree/master/packages/numberenos-lib">Numberenos</a>.</p>
+</article><nav><span class="other-entries-title"></span><ul class="previous-entries" id="previous-entries-list"><li><a href="/blog/entry/property-based-testing-with-jsverify.html"></a></li><li><a href="/blog/entry/workbench-setup-part-2.html">Workbench Setup - Part 2</a></li><li><a href="/blog/entry/why-use-a-module-bundler.html">Why use a module bundler (for Javascript)?</a></li><li><a href="/blog/entry/a-pseudo-ramble-random-number-generator.html">A Pseudo Ramble Random Number Generator</a></li><li><a href="/blog/entry/goofing-off-with-prime-numbers-part-2-prime-factorization.html">Goofing off With Prime Numbers Part 2 - Prime Factorization</a></li></ul></nav></div></body></html>
