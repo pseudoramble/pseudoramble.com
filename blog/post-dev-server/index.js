@@ -8,6 +8,7 @@ const pug = require('pug');
 const { lookupContent, setupContent } = require('./src/content.js');
 const { afoot, after, before, latest, save } = require('./src/entryHunter.js');
 const { toLink } = require('./src/transformers.js');
+const { updateRedirectsMap } = require('./src/utils.js');
 
 const app = express();
 
@@ -69,7 +70,8 @@ app.get('/post/:name/commit', (req, res) => {
   });
 
   const entrySaved = save(req.params.name, configuredEntry, entryContent);
-
+  updateRedirectsMap(req.params.name);
+  
   if (entrySaved) {
     res.render('entry', { 
       name: req.params.name,
