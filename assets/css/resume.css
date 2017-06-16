@@ -1,0 +1,147 @@
+/* resume.css */
+
+body {
+  font: 100% sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+}
+
+a {
+  text-decoration: none;
+}
+
+#resume {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#resume-heading {
+  border-bottom: 1px solid;
+  margin: 0 0 15px 0;
+}
+
+#resume-heading a {
+  font-size: 18px;
+}
+
+#resume-heading .title {
+  font-size: 25px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#resume-heading .contact {
+  font-size: 20px;
+  margin: 10px 0 0 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.resume-employment-section {
+  margin: 15px 40px;
+}
+
+.resume-employment-section-header {
+  background-color: rgba(71, 95, 119, 0.11);
+  font-size: 16px;
+  margin: 0 0 5px 0;
+  text-align: center;
+}
+
+.resume-employment-title {
+  font-style: italic;
+}
+
+.resume-employment-title::after {
+  content: ' - ';
+}
+
+.resume-employer {
+  font-style: italic;
+}
+
+.resume-employment-dates {
+  font-style: italic;
+}
+
+.resume-employment-tools-used {
+  font-size: 0.8em;
+}
+
+.resume-employment-tools-used::before {
+  font-style: italic;
+  content: 'Tech Used: '
+}
+
+.resume-extras-section {
+  padding: 15px 40px;
+}
+
+.resume-extras-section ul,ol {
+  padding-left: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.resume-extras-section li {
+  padding-bottom: 5px;
+}
+
+.page-break {
+  display: none;
+}
+
+@media all and (max-width: 768px) {
+  article#resume {
+    padding: 0;
+  }
+
+  #resume-heading .title {
+    justify-content: space-around;
+    text-align: center;
+    font-size: 22px;
+  }
+
+  #resume-heading .contact {
+    flex-flow: column;
+    text-align: center;
+    font-size: 18px;
+  }
+}
+
+@media print {
+  .non-printed {
+    display: none !important;
+  }
+  
+  body {
+    font-size: 12px;
+  }
+
+  a {
+    text-decoration: underline;
+    color: initial;
+  }
+
+  #resume-heading .title {
+    justify-content: space-between;
+  }
+
+  #resume-heading .contact {
+    flex-flow: row;
+  }
+
+  #resume-heading .contact a {
+    text-decoration: none;
+    font-size: 12px;
+  }
+
+  .page-break {
+    display: block;
+    page-break-before: always;
+  }
+
+  .resume-employment-section-header {
+    font-size: 14px;
+  }
+}
