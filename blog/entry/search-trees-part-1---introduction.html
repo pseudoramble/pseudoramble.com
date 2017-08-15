@@ -1,0 +1,91 @@
+<html><head><title></title><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/blog.css" type="text/css" media="screen"/><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/><link href="/assets/css/rainbow-style.css" rel="stylesheet" type="text/css"/><script src="/assets/js/rainbow-custom.min.js"></script><script src="/assets/js/analytics.js"></script></head><body><header>Pseudo Ramble</header><div id="main"><article><div class="dates"><span id="published">Published on 2017-08-14</span></div><h1>Search Trees Part 1 - Introduction</h1>
+<p>Who loves trees? I know <a href="https://thriftcraftlive.com/">Thirft Craft Live</a> (or whatever her name is) does!</p>
+<p><img src="http://www.rawstory.com/wp-content/uploads/2015/05/Oak-tree-Shutterstock-800x430.jpg" alt="Tree IRL"></p>
+<p>Those are cool. But I think search trees are cool. Kinda like this instead.</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Binary_search_tree.svg/1229px-Binary_search_tree.svg.png" alt="Tree IFL"></p>
+<p>This is the data structure I found the most interesting during my time at university. It's simple to draw and understand, and is also powerful.</p>
+<p>The series will try and cover the following topics:</p>
+<ol>
+<li>Introduction and Motivation (that's this page!)</li>
+<li>Implementing a Binary Search Tree (part 2)</li>
+<li>Implementing an AVL Tree (part 3)</li>
+<li>Implementing a Red-Black Tree (part 4)</li>
+</ol>
+<p>I will make an effort to cover the topics in a way that tries to assume less knowledge, but you certainly will want an understanding of programming, including arrays, comparable data types, and searching for elements in collections.</p>
+<h2>Motivation and Concept</h2>
+<p>You and your friend <em>love</em> Reddit usernames. So much so that you both subscribe <a href="http://reddit.com/r/usernames">/r/usernames</a> to write down great usernames. Right now you throw them into a list as you find them:</p>
+<blockquote>
+<p><code>usernames = [LowHangingFruit, ..., SlaugherhouseHigh5, ..., Zonoh, ..., aFreudOfMyMother, ..., MyNameIsURL]</code></p>
+</blockquote>
+<p>The &quot;...&quot; means twenty items nowadays. Far too many for you to handle. Naturally, your friend goes &quot;Let's compare lists. Do you have 'LowHangingFruit' in your list?&quot;</p>
+<p>Since your memory is not good, so you start from the top. It looks like this:</p>
+<pre><code class="language-javascript">    usernames[0] = 'LowHangingFruit'? Yes!
+</code></pre>
+<p>That happen to be true. The process was easy by coincidence in this case and it only took one step. Nice.</p>
+<blockquote>
+<p>This is called a &quot;constant time&quot; operation in CS terms. You may see it written like <code>O(1)</code> (where <code>O</code> is Big-O notation). Constant time is the best-case scenario when searching an array from front-to-back.</p>
+</blockquote>
+<p>Now your friend goes &quot;OH OH THIS ONE IS GREAT! Look for 'SuperNintendoChalmers'!&quot;</p>
+<pre><code class="language-javascript">    usernames[0] = 'SuperNintendoChalmers'? No 
+    usernames[1] = 'SuperNintendoChalmers'? No
+    ... Forever Passes ...
+    usernames[83] = 'SuperNintendoChalmers'? No
+    usernames[84] = 'SuperNintendoChalmers'? No
+</code></pre>
+<p>A search that required looking at every element in the list was fruitless. So disappointing, but this is the way the world works sometimes.</p>
+<blockquote>
+<p>This is called a &quot;linear time&quot; operation in CS terms. You may see it written like <code>O(n)</code> (where <code>n</code> is the number of operations required for the algorithm). This is the worst case scenario. There is an &quot;average&quot; case too (searching half of the list) which is considered linear because ultimately it's still a search from front-to-back.</p>
+</blockquote>
+<p>OK, so this is a bummer. Can you do better? What if you sort it and then search through it like a phone book? Now your list looks like this:</p>
+<blockquote>
+<p><code>usernames = [aFreudOfMyMother, ..., LowHangingFruit, ..., MyNameIsURL, ..., SlaugherhouseHigh5, ..., Zonoh]</code></p>
+</blockquote>
+<p>Let's pretend that 'MyNameIsURL' is the middle of the list for our example.</p>
+<p>&quot;Dude 'MyNameIsURL' so goooooood find it!&quot;</p>
+<pre><code class="language-javascript">    usernames[42] = 'MyNameIsURL'? Yes!
+</code></pre>
+<p>How about 'LowHangingFruit' this time?:</p>
+<pre><code class="language-javascript">    usernames[42] = 'LowHangingFruit'? No (look between the elements at 0-41)
+    usernames[24] = 'LowHangingFruit'? No (look between the elements at 25-41)
+    usernames[36] = 'LowHangingFruit'? No (look between 36-42)
+    ... (this completes successfully in an iteration or two more like this)
+</code></pre>
+<p>Several steps are needed, but overall much better than one-by-one! Glorious username searching! This is known as a <em>binary search</em> because at any iteration, the value you want is in the &quot;upper half&quot; of your list or the &quot;lower half&quot; of your list (two options).</p>
+<blockquote>
+<p>This is called a &quot;logarithmic time&quot; operation in CS terms. You may see it written like <code>O(log(n))</code> (where <code>log(n)</code> is the number of steps required to complete the algorithm). This happens because the list is continually partitioned into two parts, reducing the search space in half each iteration.</p>
+</blockquote>
+<p>The situation is better. What if you add new usernames though? You need to sort the list for every new entry to maintain this binary search property. What we might want now is a structure to maintain this property at all times.</p>
+<p>That's where the binary search tree comes into play.</p>
+<h2>Some Properties</h2>
+<p>Binary search trees (sometimes referred to as BST in these entries) provide a few things:</p>
+<ul>
+<li>They maintain order by the data or key used to mark each piece of data.</li>
+<li>Provides efficient operations (insert/search/delete average cases are logarithmic <code>O(log(n))</code></li>
+<li>They are really fun to draw (in contract to doubly linked lists at least).</li>
+</ul>
+<p>If we built a BST of our usernames above, it would (partially) look like this:</p>
+<pre><code>                                                  MyNameIsURL
+                                                /             \
+                              LowHangingFruit                   SlaugherhouseHigh5
+                             /               \                 /                 \
+                aFreudOfMyMother             ...             ...                   Zonoh
+</code></pre>
+<p>Now you can much more easily scout out your favorite usernames. How nice!</p>
+<h2>Some Considerations</h2>
+<p>Of course there are things to keep in mind when choosing to use a binary search tree.</p>
+<ul>
+<li>The order which items are added to the tree directly impact the performance of the tree (more on this later).</li>
+<li>The data or keys must be comparable (so they can be ordered properly using <code>&lt;</code>, <code>&gt;</code> and <code>=</code>).</li>
+<li>Functional versions of this could require lots of copying of elements (mine does, at least).</li>
+</ul>
+<p>These may or may not be worth it, depending on your specific case. This series most likely won't help you decide if you should use them or not. It's more just for the fun of it.</p>
+<h2>Next Time</h2>
+<p>Coming up next, we'll begin trying to implement these structures in F#. The goal will be to create immutable versions of BST to explore what those may look like as well. We will implement the following interface on each implementation covered:</p>
+<ul>
+<li>Insertion</li>
+<li>Search/Find</li>
+<li>Deletion</li>
+<li>Print</li>
+</ul>
+<p>And we'll dive into the major drawback of the binary search tree - how insertion order impacts performance.</p>
+</article><nav><span class="other-entries-title"></span><ul class="previous-entries" id="previous-entries-list"><li><a href="/blog/entry/search-trees-part-1---introduction.html"></a></li><li><a href="/blog/entry/copy-pasta-madness.html"></a></li><li><a href="/blog/entry/long-term-questions-for-the-us-government.html"></a></li><li><a href="/blog/entry/property-based-testing-with-jsverify.html"></a></li><li><a href="/blog/entry/workbench-setup-part-2.html">Workbench Setup - Part 2</a></li></ul></nav></div></body></html>
