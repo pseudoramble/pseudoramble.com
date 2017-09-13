@@ -1,0 +1,139 @@
+<html><head><title></title><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/blog.css" type="text/css" media="screen"/><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/><link href="/assets/css/rainbow-style.css" rel="stylesheet" type="text/css"/><script src="/assets/js/rainbow-custom.min.js"></script><script src="/assets/js/analytics.js"></script></head><body><header>Pseudo Ramble</header><div id="main"><article><div class="dates"><span id="published">Published on 2017-09-12</span></div><h1>Search Trees Part 2 - Binary Search Trees</h1>
+<p><em>This is a series about trees!</em> Search trees, that is.</p>
+<ul>
+<li><a href="http://www.pseudoramble.com/blog/entry/search-trees-part-1---introduction.html">Part 1 (Introduction)</a></li>
+<li>Part 2 (Binary Search Trees)</li>
+</ul>
+<p>To recap our story, we love usernames. We collect them, and so do our friends. We love to compare our lists of usernames together to see how they're similar. This is tedious though, so we decided to sort it and search through it. Much better, but keeping this list sorted is a project in of itself.</p>
+<p>So let's build ourselves a method to keep better track of these lists. We'll implement what's called a Binary Search Tree for this.</p>
+<p><a href="https://gitlab.com/pseudoramble/trees/blob/master/Trees/BST.fs">My code for implementing a BST in F#</a> if you want to jump right in.</p>
+<h2>Concepts</h2>
+<p>We will need two primary hunks of junk for our BST:</p>
+<ul>
+<li><a href="https://gitlab.com/pseudoramble/trees/blob/master/Trees/Node.fs">A Node Structure</a></li>
+<li><a href="https://gitlab.com/pseudoramble/trees/blob/master/Trees/BST.fs">A Module to form BST's</a></li>
+</ul>
+<p><strong>First</strong>, the <code>Node</code>. It's the fundamental structure in this BST. It's job is twofold:</p>
+<ol>
+<li>Hold onto any important data (our usernames in this case).</li>
+<li>Store the left/right edges to other Nodes.</li>
+</ol>
+<p>We also represent empty Nodes which are affectionately known as <code>Leaf</code> nodes. In our case this means there are no more values to the one of the subtrees. It's our way of knowing &quot;you don't have usernames to look for over there&quot;.</p>
+<blockquote>
+<p><em>For normal people, a Leaf is represented by... nothing. There's nothing there, so why would we draw it? For developers, it's used like a null pointer, except it forces you to not run into unexpected bugs.</em></p>
+</blockquote>
+<p><strong>Second</strong>, the module itself (called <code>BST</code> in the code). It contains the interface to form different trees. It provides the ways to deal with the <code>Node</code>'s themselves and organize them properly.</p>
+<blockquote>
+<p><em>Notice I keep saying &quot;form trees&quot; here and there. This is because we're not mutating the trees. We're creating a copy of portions of the tree we need with a value added or removed. Subtle, but important.</em></p>
+</blockquote>
+<p>The parts of the interface we'll talk about here are creating new trees, adding values to a tree, finding values in a tree, and removing values from the tree. The interface is larger than this, but I believe that once the bigger pieces are understood, the rest of the code should be consumable.</p>
+<h2>Step 1 - Create a tree</h2>
+<p>&quot;Alright, let's start a new tree with 'MyNameIsURL'.&quot; Easy enough:</p>
+<pre><code>&gt; let tree = BST.create &quot;MyNameIsURL&quot;;;
+val t : Node.TreeNode&lt;string&gt; = TreeNode (&quot;MyNameIsURL&quot;,Leaf,Leaf)
+</code></pre>
+<p>Easy enough. All <code>BST.create</code> does is makes a new <code>TreeNode</code> instance with two <code>Leaf</code> edges and the value provided by you. Note that the type is constrained to a <code>string</code>. So you can't mix-and-match your types of trees. This is a good thing.</p>
+<h2>Step 2 - Add to the tree</h2>
+<p>&quot;Wow that's the worst username I've ever seen&quot; says your humble and non-forward friend. &quot;How about adding a real username like 'SuperNintendoChalmers'?&quot; OK, then...</p>
+<pre><code>&gt; let t1 = BST.add &quot;SuperNintendoChalmers&quot; t;;
+val t1 : Node.TreeNode&lt;string&gt; =
+  TreeNode (&quot;MyNameIsURL&quot;,Leaf,TreeNode (&quot;SuperNintendoChalmers&quot;,Leaf,Leaf))
+</code></pre>
+<p>Notice what happened here. We have two <code>TreeNode</code>'s:</p>
+<ul>
+<li>The root is &quot;MyNameIsURL&quot;</li>
+<li>The direct right subtree has the node with &quot;SuperNintendoChalmers&quot; as its value</li>
+</ul>
+<p>So now, and values which come after &quot;MyNameIsURL&quot; and before &quot;SuperNintendoChalmers&quot; will be the left subtree of &quot;SuperNintendoChalmers&quot;. If we add &quot;SlaugherhouseHigh5&quot;:</p>
+<pre><code>&gt; let t3 = BST.add &quot;SlaugherhouseHigh5&quot; t2;;
+val t3 : Node.TreeNode&lt;string&gt; =
+  TreeNode
+    (&quot;MyNameIsURL&quot;,Leaf,
+    TreeNode (&quot;Zonoh&quot;,TreeNode (&quot;SlaugherhouseHigh5&quot;,Leaf,Leaf),Leaf))
+</code></pre>
+<p>We're quickly approaching the output of the tree being incomprehensible, but you can see that &quot;SlaughterhouseHigh5&quot; is the left subtree of &quot;Zonoh&quot;.</p>
+<h3>The Algorithm</h3>
+<p>The add code does the following:</p>
+<ul>
+<li>We match the type of Node. If it's a <code>Leaf</code>:
+<ul>
+<li>We've found our insertion spot and we create a new <code>TreeNode</code> with the value saved and two <code>Leaf</code> nodes (like the Create step did earlier).</li>
+</ul>
+</li>
+<li>Otherwise it's a <code>TreeNode</code> by definition. Compare the value being added to the node's value:
+<ul>
+<li>If it's less than the current Node's value, run the <code>add</code> code on the left subtree</li>
+<li>If it's greater than the current Node's value, run the <code>add</code> code on the right subtree.</li>
+<li>In either of the two steps above, we copy the current node and replace the proper subtree with the results of <code>add</code>.
+<ul>
+<li>This allows us to &quot;change&quot; the tree without mutating the existing one.</li>
+</ul>
+</li>
+<li>Otherwise the value is already in the tree. Return the current node.</li>
+</ul>
+</li>
+</ul>
+<h2>Step 3 - Find values in the tree</h2>
+<p>Forgetful like you are, you deicde to make sure you actually did insert &quot;Zonoh&quot; into the tree. Let's see now...</p>
+<pre><code>&gt; BST.search &quot;Zonoh&quot; t3;;
+val it : string option = Some &quot;Zonoh&quot;
+</code></pre>
+<p>Good to know it's there. &quot;What about 'LowHangingFruit'?&quot; your friend asks. Let's see again...</p>
+<pre><code>&gt; BST.search &quot;LowHangingFruit&quot; t6;;
+val it : string option = None
+</code></pre>
+<p>Nope, nothin'. We use <code>Option&lt;'T&gt;</code> to represent a value that may or may not exist. <code>None</code> means it doesn't exist. <code>Some &quot;Thing&quot;</code> means it does exist.</p>
+<h3>The Algorithm</h3>
+<p>This one is the most straightforward of the algorithms:</p>
+<ul>
+<li>We match the type of Node. If it's a <code>Leaf</code> the value does not exist in the tree. Return <code>None</code>.</li>
+<li>Otherwise, it's a <code>TreeNode</code> by definition. Compare the value being searched for to the node's value:
+<ul>
+<li>If they match, you found it! Return <code>Some value</code>.</li>
+<li>If it's less than the current Node's value, search the left subtree.</li>
+<li>Otherwise, search the right subtree.</li>
+</ul>
+</li>
+</ul>
+<h2>Step 4 - Remove from the tree</h2>
+<p>&quot;Dammit!&quot; your clumsy friend exclaims as they add their work username into your tree by accident.</p>
+<pre><code>&gt; let t4 = BST.add &quot;corpresource12345&quot; t3;;
+val t5 : Node.TreeNode&lt;string&gt; =
+  TreeNode
+    (&quot;MyNameIsURL&quot;,Leaf,
+    TreeNode
+      (&quot;Zonoh&quot;,TreeNode (&quot;SlaugherhouseHigh5&quot;,Leaf,Leaf),
+        TreeNode (&quot;corpresource12345&quot;,Leaf,Leaf)))
+</code></pre>
+<p>Let's take it out:</p>
+<pre><code>&gt; let t5 = BST.remove &quot;corpresource12345&quot; t5;;
+val t5 : Node.TreeNode&lt;string&gt; =
+  TreeNode
+    (&quot;MyNameIsURL&quot;,Leaf,
+    TreeNode (&quot;Zonoh&quot;,TreeNode (&quot;SlaugherhouseHigh5&quot;,Leaf,Leaf),Leaf))
+</code></pre>
+<p>Good work. <a href="http://money.cnn.com/2017/09/07/technology/business/equifax-data-breach/index.html">You have avoided an Equifax-sized security breach</a>.</p>
+<h3>The Algorithm</h3>
+<p>The code for <code>remove</code> is the most complex part of the BST because it involves maintaining the order of the tree by putting existing pieces together in a different way. Finding nodes and copying the tree are the same as <code>add</code>. The only difference is when a <code>Leaf</code> is found, the value can't be found. That means the tree isn't modified. Easy enough.</p>
+<p>The hard part comes into play when we find the value. We match on the left and right subtrees. There are three cases:</p>
+<ol>
+<li>The node has no subtrees (two <code>Leaf</code> values are matched). Simply return a <code>Leaf</code> node because there is nothing left to follow down this path.</li>
+<li>The node has one <code>TreeNode</code> and one <code>Leaf</code>. Return the <code>TreeNode</code> because that value must be reachable.</li>
+<li>The node has two <code>TreeNode</code>'s. Guh.
+<ol>
+<li>Here we find the next smallest value to the right (<code>match min tRight with...</code>). It will take the place of the existing node. This is because any other node would throw off the ordering of the tree.</li>
+<li>When we find a suitable replacement, we have to then remove that from the tree. Make a new node with the old left subtree, and remove the replacement value from the existing right subtree.</li>
+</ol>
+</li>
+</ol>
+<h2>Step 5 - Everything comes crashing down</h2>
+<p>While you were banging away on your username tree, another friend went off on their own to create theirs. They did it in-order:</p>
+<pre><code>&gt; let f = BST.create &quot;AFreudOfMine&quot; |&gt; BST.add &quot;LowHangingFruit&quot; |&gt; BST.add &quot;MyNameIsURL&quot;;;
+val f : Node.TreeNode&lt;string&gt; =
+  TreeNode
+    (&quot;AFreudOfMine&quot;,Leaf,
+    TreeNode (&quot;LowHangingFruit&quot;,Leaf,TreeNode (&quot;MyNameIsURL&quot;,Leaf,Leaf)))
+</code></pre>
+<p>Notice that the <code>TreeNodes</code> only exist as right subtrees. Your friend is unintentionally making a linear list. It's a slow one at that given the effort we went through. The plain BST on its own doesn't have an answer for this. You can recreate it and add the nodes in a different order to improve the situation, but the order-dependence will continue to cause problems.</p>
+<p>In Part 3, we'll explore an answer to this problem in the form of an AVL Tree.</p>
+</article><nav><span class="other-entries-title"></span><ul class="previous-entries" id="previous-entries-list"><li><a href="/blog/entry/search-trees-part-1---introduction.html"></a></li><li><a href="/blog/entry/copy-pasta-madness.html">Copy-Pasta Madness</a></li><li><a href="/blog/entry/long-term-questions-for-the-us-government.html">Long Term Questions for the US Government</a></li><li><a href="/blog/entry/property-based-testing-with-jsverify.html">Property-Based Testing with jsverify</a></li><li><a href="/blog/entry/workbench-setup-part-2.html">Workbench Setup - Part 2</a></li></ul></nav></div></body></html>

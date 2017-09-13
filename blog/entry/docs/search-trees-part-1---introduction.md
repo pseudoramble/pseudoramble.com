@@ -1,6 +1,11 @@
 # Search Trees Part 1 - Introduction
 
-Who loves trees? I know [Thirft Craft Live](https://thriftcraftlive.com/) (or whatever her name is) does!
+*This is a series about trees!* Search trees, that is.
+
+* Part 1 (Introduction)
+* [Part 2 (Binary Search Trees)](http://www.pseudoramble.com/blog/entry/search-trees-part-2--binary-search-trees.html)
+
+Who loves trees? I know [Thrift Craft Live](https://thriftcraftlive.com/) (or whatever her name is) does!
 
 ![Tree IRL](http://www.rawstory.com/wp-content/uploads/2015/05/Oak-tree-Shutterstock-800x430.jpg)
 
@@ -112,7 +117,7 @@ These may or may not be worth it, depending on your specific case. This series m
 
 ## Next Time
 
-Coming up next, we'll begin trying to implement these structures in F#. The goal will be to create immutable versions of BST to explore what those may look like as well. We will implement the following interface on each implementation covered:
+[In Part 2](http://www.pseudoramble.com/blog/entry/search-trees-part-2--binary-search-trees.html) we will implement BST's in F#. The goal will be to create immutable versions of BST to explore what those may look like as well. We will implement the following interface on each implementation covered:
 
 * Insertion
 * Search/Find
