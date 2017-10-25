@@ -1,0 +1,218 @@
+<html><head><title></title><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/blog.css" type="text/css" media="screen"/><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/><link href="/assets/css/rainbow-style.css" rel="stylesheet" type="text/css"/><script src="/assets/js/rainbow-custom.min.js"></script><script src="/assets/js/analytics.js"></script></head><body><header>Pseudo Ramble</header><div id="main"><article><div class="dates"><span id="published">Published on 2017-10-24</span></div><h1>Search Trees Part 3 - AVL Trees</h1>
+<p><em>This is a series about trees!</em> Search trees, that is.</p>
+<ul>
+<li><a href="http://www.pseudoramble.com/blog/entry/search-trees-part-1---introduction.html">Part 1 (Introduction)</a></li>
+<li><a href="http://www.pseudoramble.com/blog/entry/search-trees-part-2--binary-search-trees.html">Part 2 (Binary Search Trees)</a></li>
+<li>Part 3 (AVL Trees)</li>
+</ul>
+<p>To recap Part 2, we built ourselves a BST to track our favorite usernames. This lets us add, remove, and find these usernames in &quot;logarithmic time&quot; which means the amount of stuff we look at is cut in half at each step.</p>
+<p>However, we saw one of the issues with the plain BST. The performance is directly impacted by the order elements are added. This isn't great. So let's explore an option to overcome this limitation which is generally speaking known as a self-balancing binary search tree. Our specific pass at it is known as a AVL BST.</p>
+<p><a href="https://gitlab.com/pseudoramble/trees/blob/master/Trees.Core/AVL.fs">My code for implementing an AVL BST in F#</a> if you want to jump right in.</p>
+<h2>Concepts of a Self-Balanced BST</h2>
+<p><em>In terms of structure</em>, a self-balanced BST is no different from a typical BST. They are still both binary trees, which means that it's a directed set of nodes where each node has at most two children.</p>
+<p><em>In terms of behavior</em>, a self-balanced BST maintains a similar <strong>height</strong> between its left and right subtrees. The height of a tree  (or <code>h(T)</code>) is the furthest leaf node from T. Self-balanced BST's go about this by readjusting their structure when nodes are added and removed from the trees.</p>
+<p>As always, let's laugh (and learn) with some usernames. Here's an example of a balanced BST:</p>
+<pre><code>              FedoraTheExplora
+              /                \
+    ClipOnMullet               TacoBelle
+</code></pre>
+<p>This is a balanced BST that has a height of 1. I can say this BST is balanced because <code>FedoraTheExplora</code> has only one node on the left side and only one node on the right side. Since neither of those nodes have any children, they don't change the height of the tree. In other words <code>h(l) - h(r) = 0</code>. Nice.</p>
+<p>Here's a tree that's not very balanced:</p>
+<pre><code>              FedoraTheExplora
+              /                \
+    ClipOnMullet               TacoBelle
+                              /
+                      OuijaBored
+                                \
+                              PluralizesEverythings
+</code></pre>
+<p>This is most likely not a balanced BST, and it has a height of 3 (or in my hobo math, <code>h(T) = 3</code>). This BST is not balanced because <code>FedoraTheExplora</code> has one node to its left, but it has three nodes to its right. So this may be a case where the heigh difference is too large and would need to be adjusted.</p>
+<p>One more visual to explain height. What height does this tree have?</p>
+<pre><code>              FedoraTheExplora
+              /                \
+    ClipOnMullet               TacoBelle
+                              /         \
+                      OuijaBored        WingWingWeHavADinner
+</code></pre>
+<p>This tree has <code>h(T) = 2</code> because it has two paths of equal length. Since neither is larger, it doesn't add to the height of the tree anymore.</p>
+<h3>AVL BST Specifics</h3>
+<p>Our implementation will be an AVL BST. This says that given a node, the difference between the left and right subtrees will be no greater than one. Using my hobo mathematics, that means given a node T that <code>-1 &lt;= h(T.l) - h(T.r) &lt;= 1</code>.</p>
+<p>Graphically, this means that in addition to the 1st balanced BST we drew, the following is also balanced:</p>
+<pre><code>              FedoraTheExplora
+              /                \
+    ClipOnMullet               TacoBelle
+                              /
+                      OuijaBored
+</code></pre>
+<p>Even though <code>h(T.l) = 1</code> and <code>h(T.r) = 2</code>, they only differ by 1 (or <code>h(T.l) - h(T.r) = 1</code>). So is considered balanced by the AVL definition.</p>
+<h3>Rotations</h3>
+<p>So an AVL BST keeps itself balanced, but how? Using rotations! This is the process of taking a tree that's &quot;heavy&quot; or &quot;leaning&quot;  one direction and turning it into a tree with <code>h(T) = 0</code>. So if it leans to the left too much, we move it back toward the right. If it's too heavy to the right, we move it back toward the left.</p>
+<p>There are technically four patterns. It's very helpful to get the first two patterns. Once we get those, the second two patterns are just a little extra work.</p>
+<p><strong>Single Left/Single Right Rotations</strong> turn a tree that's heavy towards one direction and turn it toward the other one.</p>
+<p><em>A single left rotation</em> performs a transformation that looks like you're pulling the left side of the tree down to make a new root. Graphically that transformation is:</p>
+<pre><code>    a
+     \             b
+      b     =&gt;    / \
+       \         a   c
+        c
+</code></pre>
+<p>You could describe it like so:</p>
+<pre><code>rotateLeft tree =
+  newRoot = tree.right
+  newRoot.left = tree.value
+  newRoot.right = tree.right.right
+  newRoot
+</code></pre>
+<p>Verbally, the new root node is the right node (in this example, <code>b</code>). The new left node is the original root (in this example, <code>a</code>). Lastly, the new right node is the original trees right subtree's right (in this example, <code>c</code>).</p>
+<p><em>A single right rotation</em> performs a transformation that looks like you're pulling the right side of the tree down to make a new root. Graphically that transformation is:</p>
+<pre><code>        a
+       /            b
+      b     =&gt;     / \
+     /            a   c
+    c
+</code></pre>
+<p>You could describe it like so:</p>
+<pre><code>rotateLeft tree =
+  newRoot = tree.left
+  newRoot.left = tree
+  newRoot.right = tree.left.left
+  newRoot
+</code></pre>
+<p>Verbally, the new root node is the left node (in this example, <code>b</code>). The new left node is the original root (in this example, <code>a</code>). Lastly, the new right node is the original trees left subtree's left (in this example, <code>c</code>).</p>
+<p><strong>Double Left/Double Right Rotations</strong> (also called Left-Right/Right-Left rotations) turn a tree that is heavy to one side but had inner nodes tilting the other way. So for example, if a tree is left-heavy but the middle node has a tree going to the right, this requires a double right rotation.</p>
+<p>The trick here is to <em>turn the tree into a tree we know how to balance, then balance that instead.</em></p>
+<p><em>A double left/left-right rotation</em> performs a transformation that does a single right rotation on the <code>root.right</code> subtree, then performs a single left rotation on that new tree. Graphically that transformation is:</p>
+<pre><code>        a          a
+         \          \            b
+          c    =&gt;    b    =&gt;    / \
+         /            \        a   c
+        b              c
+</code></pre>
+<p>You could describe it like so:</p>
+<pre><code>rotateLeftRight tree =
+  newRoot = tree
+  newRoot.right = rotateRight(tree.right)
+
+  rotateLeft(intermediateTree)
+</code></pre>
+<p>Verbally, the intermediate tree makes its right-right value the original tree's right-left value. We then do the right rotation algorithm on the intermediate tree.</p>
+<p><em>A double right/right-left rotation</em> performs a transformation that does a single left rotation on the <code>root.left</code> subtree, then performs a single right rotation on that new tree. Graphically that transformation is:</p>
+<pre><code>        c           c
+       /           /          b
+      a     =&gt;    b    =&gt;    / \
+       \         /          a   c
+        b       a
+</code></pre>
+<p>You could describe it like so:</p>
+<pre><code>rotateRightLeft tree =
+  intermediateTree = rotateLeft(tree.left)
+  rotateRight(stepOneTree)
+</code></pre>
+<p>Verbally, the intermediate tree makes its left-left value the original tree's left-right value. We then do the left rotation algorithm on the intermediate tree.</p>
+<h2>With Tests, Please!</h2>
+<p><img src="http://s2.quickmeme.com/img/a7/a7f7f520b1746d392c5676d1bd856f5dd4ce0c3f59d1e43a91534b3feabc748b.jpg" alt="It Compiled:PASS"></p>
+<p>Last time I did a bad, bad thing. I skipped unit tests. For the sake of playing around with a BST <strong>that should never be used in a production environment</strong> this was probably OK. However, I found that this case would be complicated without tests.</p>
+<p><a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Tests/AVL.Tests.fs">I implemented a variety of them</a> using the Expecto testing library. For those reading who are familiar with JS testing, this is roughly what Mocha + Chai or Jest provides, but in F# instead. Funny enough, <a href="https://gitlab.com/pseudoramble/trees/commit/9ed327d2824c06202ffb55c7cd77506aee57009c">I caught a bug in the original BST implementation thanks to having real tests</a>. So even in my goof around implementation, unit tests came in handy.</p>
+<p>These tests attempt to cover all the rotation scenarios for adding and removing nodes from a tree. It also covers how I implemented the height algorithm.</p>
+<h2>Step 0 - The Stuff That Did Not Change</h2>
+<p>The functions that did not change include:</p>
+<ul>
+<li>create</li>
+<li>max</li>
+<li>min</li>
+<li>print</li>
+<li>search</li>
+</ul>
+<p>The structure of the Node does not change either, as we simply recalculate height as needed. A lot of implementations of an AVL tree recommend storing the height with the specific node. Feel free to take that change on if you'd like, as I think it would be fairly simple.</p>
+<h2>Step 1 - Add to the tree</h2>
+<p>OK, so finally we rewind back in time to when your crazy friend did this:</p>
+<pre><code>&gt; let f = BST.create &quot;AFreudOfMine&quot; |&gt; BST.add &quot;LowHangingFruit&quot; |&gt; BST.add &quot;MyNameIsURL&quot;;;
+val f : Node.TreeNode&lt;string&gt; =
+  TreeNode
+    (&quot;AFreudOfMine&quot;,Leaf,
+    TreeNode (&quot;LowHangingFruit&quot;,Leaf,TreeNode (&quot;MyNameIsURL&quot;,Leaf,Leaf)))
+</code></pre>
+<p>Clearly crazy. But if we swap out the <code>BST</code> module with the <code>AVL</code> module, we get:</p>
+<pre><code>&gt; let f1 = AVL.create &quot;AFreudOfMine&quot; |&gt; AVL.add &quot;LowHangingFruit&quot; |&gt; AVL.add &quot;MyNameIsURL&quot;;;
+val f1 : Node.TreeNode&lt;string&gt; =
+  TreeNode
+    (&quot;LowHangingFruit&quot;,TreeNode (&quot;AFreudOfMine&quot;,Leaf,Leaf),
+     TreeNode (&quot;MyNameIsURL&quot;,Leaf,Leaf))
+</code></pre>
+<p>And there you go. Your friend's tree has been saved from certain doom. So what happened?</p>
+<ul>
+<li>First the tree is made. It has one node, so it's balanced. Nothing special happens.</li>
+<li>Next we add a node to the right of the root.
+<ul>
+<li>The addition of the node is the same as the regular BST. After the addition (as the recursion unwinds) we check to see if the tree is balanced.</li>
+<li>Since <a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Core/AVL.fs#L61"><code>h(root.l) - h(root.r) = -1</code></a> the AVL tree is still balanced. No rotations required.</li>
+</ul>
+</li>
+<li>Then we add a node to the right of the right of the root.
+<ul>
+<li>The addition of the node is the same as the regular BST. After the addition (as the recursion unwinds) we check to see if the tree is balanced.</li>
+<li>Since <a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Core/AVL.fs#L64"><code>h(root.l) - h(root.r) = -2</code></a> the AVL tree is not balanced anymore. We need to rotate.</li>
+<li><a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Core/AVL.fs#L44">Since our tree is heavy to the right</a>, we performed a <a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Core/AVL.fs#L11">single left rotation</a>.</li>
+<li>This means making a new <code>TreeNode</code> where the left subtree is a new <code>TreeNode</code> that holds onto the original left value and the original right's left subtree.</li>
+</ul>
+</li>
+</ul>
+<p>Now what if your friend decided he wanted to do it in almost alphabetical order?</p>
+<pre><code>&gt; let f1 = AVL.create &quot;AFreudOfMine&quot; |&gt; AVL.add &quot;LowHangingFruit&quot; |&gt; AVL.add &quot;ClipOnMullet&quot;;;
+val f1 : Node.TreeNode&lt;string&gt; =
+  TreeNode
+    (&quot;ClipOnMullet&quot;,TreeNode (&quot;AFreudOfMine&quot;,Leaf,Leaf),
+    TreeNode (&quot;LowHangingFruit&quot;,Leaf,Leaf))
+</code></pre>
+<p>Once again, nice and balanced. What happened?</p>
+<ul>
+<li>The first two steps are the same as above.</li>
+<li>Then we add a node to the left of the right of the root.
+<ul>
+<li>Since <a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Core/AVL.fs#L64"><code>h(root.l) - h(root.r) = -2</code></a> the AVL tree is not balanced anymore. We need to rotate.</li>
+<li><a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Core/AVL.fs#L46">Since our tree is sorta heavy to the right</a> we perform a double left rotation.</li>
+<li>This means first making a new <code>TreeNode</code> for the right subtree (and performing a <a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Core/AVL.fs#L19"><code>rotateRight</code></a> on that). We then perform a <code>rotateLeft</code> on this new <code>TreeNode</code> for our adjusted result.</li>
+</ul>
+</li>
+</ul>
+<h2>Step 2 - Remove from the tree</h2>
+<p>We're covered from your friend adding values in weird orders, but of course your most indecisive friend is removing them willy-nilly. What happens?</p>
+<pre><code>&gt; let f2 = AVL.create &quot;AFreudOfMine&quot; |&gt; AVL.add &quot;ClipOnMullet&quot; |&gt; AVL.add &quot;LowHangingFruit&quot; |&gt; AVL.add &quot;MyNameIsURL&quot;;;
+val f2 : Node.TreeNode&lt;string&gt; =
+  TreeNode
+    (&quot;ClipOnMullet&quot;,TreeNode (&quot;AFreudOfMine&quot;,Leaf,Leaf),
+    TreeNode (&quot;LowHangingFruit&quot;,Leaf,TreeNode (&quot;MyNameIsURL&quot;,Leaf,Leaf)))
+
+&gt; let f3 = AVL.remove &quot;AFreudOfMine&quot; f2;;
+val f3 : Node.TreeNode&lt;string&gt; =
+  TreeNode
+    (&quot;LowHangingFruit&quot;,TreeNode (&quot;ClipOnMullet&quot;,Leaf,Leaf),
+    TreeNode (&quot;MyNameIsURL&quot;,Leaf,Leaf))
+</code></pre>
+<p>The nice part about this is that once you get the rotations, additions and removals aren't terribly different. The steps for this case look like the following:</p>
+<ul>
+<li>First do the normal creation/addition steps like we did earlier.</li>
+<li>Next we remove the node to the left of the root.
+<ul>
+<li><a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Core/AVL.fs#L115">The removal of the node is the same as the regular BST</a>. After the removal (as the recursion unwinds) we check to see if the tree is balanced.</li>
+<li>Since <a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Core/AVL.fs#L131"><code>h(root.l) - h(root.r) = -2</code></a> the AVL tree is not balanced anymore. We need to rotate.</li>
+<li><a href="https://gitlab.com/pseudoramble/trees/blob/9ed327d2824c06202ffb55c7cd77506aee57009c/Trees.Core/AVL.fs#L134">Perform same left rotation strategy as before</a>.</li>
+</ul>
+</li>
+</ul>
+<p>This is repeated for the other rotations scenarios.</p>
+<h2>Step 3 - We Are Actually Done</h2>
+<p>We made it! We have a tree that stays balanced (in all the cases I tested for). Your friends are now free to grow their username lists as wildly as they want, and still have a (somewhat) easy time looking them up.</p>
+<p>If you've made it through all the parts, thanks for sticking with it. We covered some ground, so in summary:</p>
+<ul>
+<li>We talked about the issues of keeping items that can be ordered in simple lists (including just sorting them always).</li>
+<li>We talked about how Binary Search Trees help describe the order of data by separating it into nodes.
+<ul>
+<li>Those nodes have values in a left subtree whose value is less than the root node.</li>
+<li>Those nodes have values in a right subtree whose value is greater than the root node.</li>
+<li>This lets us search through sorted data quickly. <code>O(log(n))</code> quickly in Computer Science terms.</li>
+</ul>
+</li>
+<li>Part 3 (AVL Trees). Finally, we talked about how to keep trees balanced using an AVL tree (that's this piece).</li>
+</ul>
+</article><nav><span class="other-entries-title"></span><ul class="previous-entries" id="previous-entries-list"><li><a href="/blog/entry/search-trees-part-2--binary-search-trees.html">Search Trees Part 2 - Binary Search Trees</a></li><li><a href="/blog/entry/search-trees-part-1---introduction.html">Search Trees Part 1 - Introduction</a></li><li><a href="/blog/entry/copy-pasta-madness.html">Copy-Pasta Madness</a></li><li><a href="/blog/entry/long-term-questions-for-the-us-government.html">Long Term Questions for the US Government</a></li><li><a href="/blog/entry/property-based-testing-with-jsverify.html">Property-Based Testing with jsverify</a></li></ul></nav></div></body></html>
