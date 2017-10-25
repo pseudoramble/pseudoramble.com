@@ -4,6 +4,7 @@
 
 * Part 1 (Introduction)
 * [Part 2 (Binary Search Trees)](http://www.pseudoramble.com/blog/entry/search-trees-part-2--binary-search-trees.html)
+* [Part 3 (AVL Trees)](http://www.pseudoramble.com/blog/entry/search-trees-part-3---avl-trees.html)
 
 Who loves trees? I know [Thrift Craft Live](https://thriftcraftlive.com/) (or whatever her name is) does!
 
