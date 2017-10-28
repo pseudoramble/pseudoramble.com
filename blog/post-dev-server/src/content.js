@@ -32,5 +32,6 @@ const setupContent = content => {
 
 module.exports = {
   lookupContent,
-  setupContent
+  setupContent,
+  titleOf
 }

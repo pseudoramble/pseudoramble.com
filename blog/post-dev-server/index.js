@@ -5,7 +5,7 @@ const fs = require('fs');
 const moment = require('moment');
 const pug = require('pug');
 
-const { lookupContent, setupContent } = require('./src/content.js');
+const { lookupContent, setupContent, titleOf } = require('./src/content.js');
 const { afoot, after, before, latest, save } = require('./src/entryHunter.js');
 const { toLink } = require('./src/transformers.js');
 const { updateRedirectsMap } = require('./src/utils.js');
@@ -17,7 +17,7 @@ const configureEntry = entryName => {
   const contentStored = setupContent(content);
 
   const afootEntry = afoot(entryName) || { name: entryName, created: new Date().toISOString() };
-  const previousEntries = afootEntry.modified ? before(entryName) : latest();
+  const previousEntries = afoot(entryName) ? before(entryName) : latest();
   
   const createdDate = moment(afootEntry.created);
 
@@ -69,7 +69,7 @@ app.get('/post/:name/commit', (req, res) => {
     modifiedDate
   });
 
-  const entrySaved = save(req.params.name, configuredEntry, entryContent);
+  const entrySaved = save(req.params.name, titleOf(req.params.name), configuredEntry, entryContent);
   updateRedirectsMap(req.params.name);
   
   if (entrySaved) {
