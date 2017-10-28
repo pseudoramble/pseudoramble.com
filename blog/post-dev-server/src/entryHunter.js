@@ -15,13 +15,13 @@ const summonEntries = ({name = '', comparator = byNewestFirst, limit = 5}) =>
       .slice(name && 1 || 0, name && (limit + 1) || limit)
       .value();
 
-const before = (name, limit=5) => summonEntries({ name });
-const after = (name, limit=5) => summonEntries({ name, comparator: byOldestFirst });
-const latest = (name, limit=5) => summonEntries({});
+const before = (name, limit=5) => summonEntries({ name, limit });
+const after = (name, limit=5) => summonEntries({ name, limit, comparator: byOldestFirst });
+const latest = (name, limit=5) => summonEntries({ limit });
 const oldest = (name, limit=5) => summonEntries({ comparator: byOldestFirst });
 const afoot = (name) => _.find(writtenEntries, { name });
 
-const save = (name, entry, content) => {
+const save = (name, title, entry, content) => {
   const location = _.findIndex(writtenEntries, { name });
 
   if (location > -1) {
@@ -29,6 +29,7 @@ const save = (name, entry, content) => {
   } else {
     writtenEntries.splice(0, 0, {
       name,
+      title,
       created: entry.publishedDate,
       modified: entry.modifiedDate
     });
