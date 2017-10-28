@@ -16,7 +16,7 @@ const configureEntry = entryName => {
   const content = lookupContent(entryName);
   const contentStored = setupContent(content);
 
-  const afootEntry = afoot(entryName) || { name: entryName, created: new Date().toISOString() };
+  const afootEntry = afoot(entryName)  || { name: entryName, created: new Date().toISOString() };
   const previousEntries = afoot(entryName) ? before(entryName) : latest();
   
   const createdDate = moment(afootEntry.created);
@@ -69,8 +69,11 @@ app.get('/post/:name/commit', (req, res) => {
     modifiedDate
   });
 
+  if (!afoot(req.params.name)) {
+    updateRedirectsMap(req.params.name);
+  }
+
   const entrySaved = save(req.params.name, titleOf(req.params.name), configuredEntry, entryContent);
-  updateRedirectsMap(req.params.name);
   
   if (entrySaved) {
     res.render('entry', { 
