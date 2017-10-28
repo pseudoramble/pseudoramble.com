@@ -1,4 +1,4 @@
-<html><head><title></title><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/blog.css" type="text/css" media="screen"/><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/><link href="/assets/css/rainbow-style.css" rel="stylesheet" type="text/css"/><script src="/assets/js/rainbow-custom.min.js"></script><script src="/assets/js/analytics.js"></script></head><body><header>Pseudo Ramble</header><div id="main"><article><div class="dates"><span id="published">Published on 2017-10-24</span></div><h1>Search Trees Part 3 - AVL Trees</h1>
+<html><head><title></title><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/blog.css" type="text/css" media="screen"/><link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/><link href="/assets/css/rainbow-style.css" rel="stylesheet" type="text/css"/><script src="/assets/js/rainbow-custom.min.js"></script><script src="/assets/js/analytics.js"></script></head><body><header>Pseudo Ramble</header><div id="main"><article><div class="dates"><span id="published">Published on 2017-10-24</span><span id="modified">Modified on 2017-10-28</span></div><h1>Search Trees Part 3 - AVL Trees</h1>
 <p><em>This is a series about trees!</em> Search trees, that is.</p>
 <ul>
 <li><a href="http://www.pseudoramble.com/blog/entry/search-trees-part-1---introduction.html">Part 1 (Introduction)</a></li>
@@ -36,7 +36,7 @@
 </code></pre>
 <p>This tree has <code>h(T) = 2</code> because it has two paths of equal length. Since neither is larger, it doesn't add to the height of the tree anymore.</p>
 <h3>AVL BST Specifics</h3>
-<p>Our implementation will be an AVL BST. This says that given a node, the difference between the left and right subtrees will be no greater than one. Using my hobo mathematics, that means given a node T that <code>-1 &lt;= h(T.l) - h(T.r) &lt;= 1</code>.</p>
+<p>Our implementation will be an AVL BST. This says that given a node, the difference between height of the left and right subtrees will be no greater than one. Using my hobo mathematics, that means given a node T that <code>-1 &lt;= h(T.l) - h(T.r) &lt;= 1</code>.</p>
 <p>Graphically, this means that in addition to the 1st balanced BST we drew, the following is also balanced:</p>
 <pre><code>              FedoraTheExplora
               /                \
@@ -59,7 +59,7 @@
 <p>You could describe it like so:</p>
 <pre><code>rotateLeft tree =
   newRoot = tree.right
-  newRoot.left = tree.value
+  newRoot.left = tree
   newRoot.right = tree.right.right
   newRoot
 </code></pre>
@@ -93,7 +93,7 @@
   newRoot = tree
   newRoot.right = rotateRight(tree.right)
 
-  rotateLeft(intermediateTree)
+  rotateLeft(newRoot)
 </code></pre>
 <p>Verbally, the intermediate tree makes its right-right value the original tree's right-left value. We then do the right rotation algorithm on the intermediate tree.</p>
 <p><em>A double right/right-left rotation</em> performs a transformation that does a single left rotation on the <code>root.left</code> subtree, then performs a single right rotation on that new tree. Graphically that transformation is:</p>
@@ -105,8 +105,9 @@
 </code></pre>
 <p>You could describe it like so:</p>
 <pre><code>rotateRightLeft tree =
-  intermediateTree = rotateLeft(tree.left)
-  rotateRight(stepOneTree)
+  newRoot = tree
+  newRoot.left = rotateLeft(tree.left)
+  rotateRight(newRoot)
 </code></pre>
 <p>Verbally, the intermediate tree makes its left-left value the original tree's left-right value. We then do the left rotation algorithm on the intermediate tree.</p>
 <h2>With Tests, Please!</h2>

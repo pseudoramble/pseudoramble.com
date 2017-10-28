@@ -50,7 +50,7 @@ This tree has `h(T) = 2` because it has two paths of equal length. Since neither
 
 ### AVL BST Specifics
 
-Our implementation will be an AVL BST. This says that given a node, the difference between the left and right subtrees will be no greater than one. Using my hobo mathematics, that means given a node T that `-1 <= h(T.l) - h(T.r) <= 1`.
+Our implementation will be an AVL BST. This says that given a node, the difference between height of the left and right subtrees will be no greater than one. Using my hobo mathematics, that means given a node T that `-1 <= h(T.l) - h(T.r) <= 1`.
 
 Graphically, this means that in addition to the 1st balanced BST we drew, the following is also balanced:
 
@@ -82,7 +82,7 @@ You could describe it like so:
 
     rotateLeft tree =
       newRoot = tree.right
-      newRoot.left = tree.value
+      newRoot.left = tree
       newRoot.right = tree.right.right
       newRoot
 
@@ -124,7 +124,7 @@ You could describe it like so:
       newRoot = tree
       newRoot.right = rotateRight(tree.right)
 
-      rotateLeft(intermediateTree)
+      rotateLeft(newRoot)
 
 Verbally, the intermediate tree makes its right-right value the original tree's right-left value. We then do the right rotation algorithm on the intermediate tree.
 
@@ -139,8 +139,9 @@ Verbally, the intermediate tree makes its right-right value the original tree's 
 You could describe it like so:
 
     rotateRightLeft tree =
-      intermediateTree = rotateLeft(tree.left)
-      rotateRight(stepOneTree)
+      newRoot = tree
+      newRoot.left = rotateLeft(tree.left)
+      rotateRight(newRoot)
 
 Verbally, the intermediate tree makes its left-left value the original tree's left-right value. We then do the left rotation algorithm on the intermediate tree.
 
