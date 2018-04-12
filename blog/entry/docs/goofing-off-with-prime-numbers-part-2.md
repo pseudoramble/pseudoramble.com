@@ -2,7 +2,7 @@
 
 I am not fantastic at math. I've always found it interesting, but it's never come to me naturally. Sometimes it's good to face things you're not good at and give them a shot! So here we are, goofing off with prime numbers (again). 
 
-[Here's what we talked about the last time we goofed off with prime numbers.](http://pseudoramble.com/blog/entry/goofing-off-with-prime-numbers-part-1.html)
+[Here's what we talked about the last time we goofed off with prime numbers.](https://pseudoramble.com/blog/entry/goofing-off-with-prime-numbers-part-1.html)
 
 ## I don't feel like reading your last entry. What are you talking about?
 
@@ -43,7 +43,7 @@ That means that we can hunt down a factorization of a particular number. As long
 
 Examples are always good. Let's look at the number 12. How might we go about finding the prime factors of this? We need to know how we can break 12 down into smaller even parts. We also know that since we're only interested in prime numbers, we can skip other numbers like 4 and 8 because they're not interesting here.
 
-So first, let's get some primes together, shall we? [Using our handy sieve from last time](http://pseudoramble.com/blog/entry/goofing-off-with-prime-numbers-part-1.html), we get the prime numbers <= 12: `{2, 3, 5, 7, 11}` These will be our "tests" and be the only possible factors we can see in our answer.
+So first, let's get some primes together, shall we? [Using our handy sieve from last time](https://pseudoramble.com/blog/entry/goofing-off-with-prime-numbers-part-1.html), we get the prime numbers <= 12: `{2, 3, 5, 7, 11}` These will be our "tests" and be the only possible factors we can see in our answer.
 
 Since a lot more numbers will be divisible by 2 than 3 (so on and so on) we can start from the first and go to the last prime in our test. We're going to look for numbers that divide 12 evenly, but eliminate numbers that composites as we go along. 
 

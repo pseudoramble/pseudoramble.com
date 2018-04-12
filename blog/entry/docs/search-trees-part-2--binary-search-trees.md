@@ -2,9 +2,9 @@
 
 *This is a series about trees!* Search trees, that is.
 
-* [Part 1 (Introduction)](http://www.pseudoramble.com/blog/entry/search-trees-part-1---introduction.html)
+* [Part 1 (Introduction)](https://www.pseudoramble.com/blog/entry/search-trees-part-1---introduction.html)
 * Part 2 (Binary Search Trees)
-* [Part 3 (AVL Trees)](http://www.pseudoramble.com/blog/entry/search-trees-part-3---avl-trees.html)
+* [Part 3 (AVL Trees)](https://www.pseudoramble.com/blog/entry/search-trees-part-3---avl-trees.html)
 
 To recap our story, we love usernames. We collect them, and so do our friends. We love to compare our lists of usernames together to see how they're similar. This is tedious though, so we decided to sort it and search through it. Much better, but keeping this list sorted is a project in of itself.
 

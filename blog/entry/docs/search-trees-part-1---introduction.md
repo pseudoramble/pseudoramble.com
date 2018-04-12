@@ -3,8 +3,8 @@
 *This is a series about trees!* Search trees, that is.
 
 * Part 1 (Introduction)
-* [Part 2 (Binary Search Trees)](http://www.pseudoramble.com/blog/entry/search-trees-part-2--binary-search-trees.html)
-* [Part 3 (AVL Trees)](http://www.pseudoramble.com/blog/entry/search-trees-part-3---avl-trees.html)
+* [Part 2 (Binary Search Trees)](https://www.pseudoramble.com/blog/entry/search-trees-part-2--binary-search-trees.html)
+* [Part 3 (AVL Trees)](https://www.pseudoramble.com/blog/entry/search-trees-part-3---avl-trees.html)
 
 Who loves trees? I know [Thrift Craft Live](https://thriftcraftlive.com/) (or whatever her name is) does!
 
@@ -118,7 +118,7 @@ These may or may not be worth it, depending on your specific case. This series m
 
 ## Next Time
 
-[In Part 2](http://www.pseudoramble.com/blog/entry/search-trees-part-2--binary-search-trees.html) we will implement BST's in F#. The goal will be to create immutable versions of BST to explore what those may look like as well. We will implement the following interface on each implementation covered:
+[In Part 2](https://www.pseudoramble.com/blog/entry/search-trees-part-2--binary-search-trees.html) we will implement BST's in F#. The goal will be to create immutable versions of BST to explore what those may look like as well. We will implement the following interface on each implementation covered:
 
 * Insertion
 * Search/Find

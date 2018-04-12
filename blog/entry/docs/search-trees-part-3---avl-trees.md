@@ -2,8 +2,8 @@
 
 *This is a series about trees!* Search trees, that is.
 
-* [Part 1 (Introduction)](http://www.pseudoramble.com/blog/entry/search-trees-part-1---introduction.html)
-* [Part 2 (Binary Search Trees)](http://www.pseudoramble.com/blog/entry/search-trees-part-2--binary-search-trees.html)
+* [Part 1 (Introduction)](https://www.pseudoramble.com/blog/entry/search-trees-part-1---introduction.html)
+* [Part 2 (Binary Search Trees)](https://www.pseudoramble.com/blog/entry/search-trees-part-2--binary-search-trees.html)
 * Part 3 (AVL Trees)
 
 To recap Part 2, we built ourselves a BST to track our favorite usernames. This lets us add, remove, and find these usernames in "logarithmic time" which means the amount of stuff we look at is cut in half at each step.

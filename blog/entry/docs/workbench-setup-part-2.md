@@ -18,7 +18,7 @@ TL;DR
 Considerations for the desk
 --------------------
 
-[Like the last time I looked into a new desk](http://pseudoramble.com/blog/entry/workbench-setup-part-1.html), 
+[Like the last time I looked into a new desk](https://pseudoramble.com/blog/entry/workbench-setup-part-1.html), 
 I wanted a standing desk setup. My workbench from this past entry had served me well.
 
 Here are general things I've wanted in the past:

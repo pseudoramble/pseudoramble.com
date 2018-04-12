@@ -11,7 +11,7 @@ Since so many of us spend so much time enjoying coffee, it seems like being conf
 
 The gist of it is that I can certainly save if I avoid going out. In fact, it would cost me roughly half (50%) as much to make it at home instead of going out to a specific location to get my coffee.
 
-Firstly, [here's where I did the calculations](www.pseudoramble.com/pub/should_i_go_to_dunkin_donuts_today.ods). Feel free to tinker with it and find any mistakes, or switch it to meet your needs. I tried to set it up so that the numbers could at least be changed in case other people see things differently. 
+Firstly, [here's where I did the calculations](https://www.pseudoramble.com/pub/should_i_go_to_dunkin_donuts_today.ods). Feel free to tinker with it and find any mistakes, or switch it to meet your needs. I tried to set it up so that the numbers could at least be changed in case other people see things differently. 
 
 I made a few assumptions to help myself work these details out:
 
