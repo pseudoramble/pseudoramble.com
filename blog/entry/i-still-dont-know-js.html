@@ -1,0 +1,75 @@
+<html><head><title></title><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/assets/css/blog.css" type="text/css" media="screen"/><link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/><link href="/assets/css/rainbow-style.css" rel="stylesheet" type="text/css"/><script src="/assets/js/rainbow-custom.min.js"></script><script src="/assets/js/analytics.js"></script></head><body><header>Pseudo Ramble</header><div id="main"><article><div class="dates"><span id="published">Published on 2018-10-01</span></div><h1>I Still Dont Know JS</h1>
+<p>Some days, I get complacent. So complacent, in fact, that I let myself slip into thinking I <em>know</em> Javascript.
+If this fact alone doesn't make you sigh, well, thanks for your understanding. Here was today's unexpected adventure.</p>
+<h2>What's wrong with the code?</h2>
+<pre><code>/**
+ * Given a number, decrease it by 1, or stop it at the specified min.
+ * @param {number} value - The value to decrease
+ * @param {number} min - The limit which the value can reach. Defaults to Number.MIN_VALUE.
+ * @returns {number} - Either value -1 or min.
+ */
+function decrement(value, min = Number.MIN_VALUE) {
+  const nextValue = value - 1;
+  return Math.max(nextValue, min);
+}
+</code></pre>
+<p>This code is not trying to be sneaking or misleading at all. It takes one of the existing value. If it finds that <code>min</code> value is larger than <code>nextValue</code> it returns <code>min</code>. Otherwise it returns <code>nextValue</code>. Here are some examples:</p>
+<pre><code>decrement(10, 5);     //    9  OK
+decrement(-100, -101) // -101  OK
+decrement(-101, -101) // -101  OK
+</code></pre>
+<p>So far, so good. Don't forget to test that default argument:</p>
+<pre><code>decrement(10)   //      9  OK
+decrement(-100) // 5e-324  OK wait what?
+decrement(-1)   // 5e-324  :\
+decrement(0)    // 5e-324  Oh no...
+</code></pre>
+<p>What can we gather from this? Well, first thing is that it seems like this oddball result is the same. That means we get the same branch on each run. What else can we tell?</p>
+<pre><code>decrement(0.9999)  // 5e-324                   Bad
+decrement(1.9999)  // 0.9999                   OK
+decrement(1.0001)  // 0.00009999999999998899   OK
+decrement(1)       // 5e-324                   Bad
+</code></pre>
+<p>We can see when our function maps to a number &lt;= 0 that we get this funny result. Huh...</p>
+<p>So what's happening? <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_VALUE">MDN, tell me about <code>MAX_VALUE</code>!</a>:</p>
+<blockquote>
+<p>The <code>Number.MAX_VALUE</code> property represents the maximum numeric value representable in JavaScript.</p>
+<p>...</p>
+<p>The <code>MAX_VALUE</code> property has a value of approximately <code>1.79E+308</code>.</p>
+</blockquote>
+<p>OK, that sounds right. <a href="https://link">So naturally <code>MIN_VALUE</code> is the opposite?</a></p>
+<blockquote>
+<p>The <code>Number.MIN_VALUE</code> property represents the smallest positive numeric value representable in JavaScript.</p>
+<p>...</p>
+<p>The <code>MIN_VALUE</code> property is the number closest to <code>0</code>, not the most negative number, that JavaScript can represent.
+<code>MIN_VALUE</code> has a value of approximately <code>5e-324</code>. Values smaller than <code>MIN_VALUE</code> (&quot;underflow values&quot;) are converted to <code>0</code>.</p>
+</blockquote>
+<p>It turns out that my misunderstanding came from not thinking hard enough about how floats are represented.
+<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html#MIN_VALUE">For example, Java has the same implementation</a> of these constants.
+Interestingly, <a href="https://docs.microsoft.com/en-us/dotnet/api/system.double.minvalue?view=netframework-4.7.2">C# chose to assign <code>MIN_VALUE</code> to the truly smallest value you can represent with 64-bit floats</a> and instead created the more by-the-spec constant <a href="https://docs.microsoft.com/en-us/dotnet/api/system.double.epsilon?view=netframework-4.7.2">epsilon</a> to determine what the smallest possible granularity you could have is.</p>
+<p>Not what I would have expected intuitively, though I see the reasoning behind it.</p>
+<p>Anyway, the solution we landed on for our situation was to default the bound from <code>Number.MIN_VALUE</code> to <code>Number.MIN_SAFE_INTEGER</code>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_SAFE_INTEGER">From MDN one more time:</a></p>
+<blockquote>
+<p>The <code>Number.MIN_SAFE_INTEGER</code> constant represents the minimum safe integer in JavaScript (<code>-(2^53 - 1)</code>).</p>
+<p>...</p>
+<p>The reasoning behind that number is that JavaScript uses double-precision floating-point format numbers as specified in IEEE 754 and can only safely represent numbers between <code>-(2^53 - 1)</code> and <code>2^53 - 1</code>.</p>
+</blockquote>
+<h2>The resulting code</h2>
+<pre><code>/**
+ * Given a number, decrease it by 1, or stop it at the specified min.
+ * @param {number} value - The value to decrease
+ * @param {number} min - The limit which the value can reach. Defaults to Number.MIN_VALUE.
+ * @returns {number} - Either value -1 or min.
+ */
+function decrement(value, min = Number.MIN_SAFE_INTEGER) {
+  const nextValue = value - 1;
+  return Math.max(nextValue, min);
+}
+
+decrement(10)   //      9  OK
+decrement(-100) //   -101  OK
+decrement(-1)   //     -2  OK
+decrement(0)    //     -1  Woohoo!
+</code></pre>
+<p>So, in conclusion, I still don't know JS, but I really don't know floats either. Woof.</p>
+</article><nav><span class="other-entries-title"></span><ul class="previous-entries" id="previous-entries-list"><li><a href="/blog/entry/a-raisin-of-reason-ml.html">A Raisin Of Reason Ml</a></li><li><a href="/blog/entry/search-trees-part-3---avl-trees.html">Search Trees Part 3 - AVL Trees</a></li><li><a href="/blog/entry/search-trees-part-2--binary-search-trees.html">Search Trees Part 2 - Binary Search Trees</a></li><li><a href="/blog/entry/search-trees-part-1---introduction.html">Search Trees Part 1 - Introduction</a></li><li><a href="/blog/entry/copy-pasta-madness.html">Copy-Pasta Madness</a></li></ul></nav></div></body></html>
