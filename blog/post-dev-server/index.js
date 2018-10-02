@@ -88,5 +88,6 @@ app.get('/post/:name/commit', (req, res) => {
 })
 
 app.listen(3000, () => {
-  console.warn('listening on http://localhost:3000');
+  console.info('You can begin editing by going here:');
+  console.info('http://localhost:3000/post/your-entry-name-here');
 });
