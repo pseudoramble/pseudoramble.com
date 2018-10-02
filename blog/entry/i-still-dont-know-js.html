@@ -2,7 +2,7 @@
 <p>Some days, I get complacent. So complacent, in fact, that I let myself slip into thinking I <em>know</em> Javascript.
 If this fact alone doesn't make you sigh, well, thanks for your understanding. Here was today's unexpected adventure.</p>
 <h2>What's wrong with the code?</h2>
-<pre><code>/**
+<pre><code data-language="javascript">/**
  * Given a number, decrease it by 1, or stop it at the specified min.
  * @param {number} value - The value to decrease
  * @param {number} min - The limit which the value can reach. Defaults to Number.MIN_VALUE.
@@ -14,18 +14,18 @@ function decrement(value, min = Number.MIN_VALUE) {
 }
 </code></pre>
 <p>This code is not trying to be sneaking or misleading at all. It takes one of the existing value. If it finds that <code>min</code> value is larger than <code>nextValue</code> it returns <code>min</code>. Otherwise it returns <code>nextValue</code>. Here are some examples:</p>
-<pre><code>decrement(10, 5);     //    9  OK
+<pre><code data-language="javascript">decrement(10, 5);     //    9  OK
 decrement(-100, -101) // -101  OK
 decrement(-101, -101) // -101  OK
 </code></pre>
 <p>So far, so good. Don't forget to test that default argument:</p>
-<pre><code>decrement(10)   //      9  OK
+<pre><code data-language="javascript">decrement(10)   //      9  OK
 decrement(-100) // 5e-324  OK wait what?
 decrement(-1)   // 5e-324  :\
 decrement(0)    // 5e-324  Oh no...
 </code></pre>
 <p>What can we gather from this? Well, first thing is that it seems like this oddball result is the same. That means we get the same branch on each run. What else can we tell?</p>
-<pre><code>decrement(0.9999)  // 5e-324                   Bad
+<pre><code data-language="javascript">decrement(0.9999)  // 5e-324                   Bad
 decrement(1.9999)  // 0.9999                   OK
 decrement(1.0001)  // 0.00009999999999998899   OK
 decrement(1)       // 5e-324                   Bad
@@ -55,7 +55,7 @@ Interestingly, <a href="https://docs.microsoft.com/en-us/dotnet/api/system.doubl
 <p>The reasoning behind that number is that JavaScript uses double-precision floating-point format numbers as specified in IEEE 754 and can only safely represent numbers between <code>-(2^53 - 1)</code> and <code>2^53 - 1</code>.</p>
 </blockquote>
 <h2>The resulting code</h2>
-<pre><code>/**
+<pre><code data-language="javascript">/**
  * Given a number, decrease it by 1, or stop it at the specified min.
  * @param {number} value - The value to decrease
  * @param {number} min - The limit which the value can reach. Defaults to Number.MIN_VALUE.
