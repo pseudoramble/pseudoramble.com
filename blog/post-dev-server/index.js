@@ -34,6 +34,7 @@ const configureEntry = entryName => {
 
 app.set('view engine', 'pug');
 app.use(express.static(__dirname + '/../../'));
+app.use('/images/', express.static(__dirname + '/../images'));
 
 app.get('/', (req, res) => {
   res.render('index', { title: 'le index' });
