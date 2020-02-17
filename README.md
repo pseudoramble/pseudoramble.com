@@ -19,4 +19,3 @@ TODO
   * Add in more "official" resume (PDF or otherwise).
   * Convert blog to use the assets/site.css stylesheet (it currently uses its own copy).
   * Convert whole site to use Sass or something else.
-  * Setup Google Analytics.
