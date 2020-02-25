@@ -2,7 +2,9 @@
 
 body {
   font: 100% sans-serif;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'MetropolisRegular', sans-serif;
+  font-style: normal;
+  font-weight: normal;
 }
 
 a {
