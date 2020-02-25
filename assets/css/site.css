@@ -85,6 +85,11 @@ h6 {
     margin: 1.5em 0.5em 0.3em 0.1em;
 }
 
+header a {
+    text-decoration: none;
+    color: inherit;
+}
+
 p {
     margin: 0.5em;
 }
