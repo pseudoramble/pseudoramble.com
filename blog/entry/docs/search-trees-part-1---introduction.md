@@ -8,7 +8,7 @@
 
 Who loves trees? I know [Thrift Craft Live](https://thriftcraftlive.com/) (or whatever her name is) does!
 
-![Tree IRL](http://www.rawstory.com/wp-content/uploads/2015/05/Oak-tree-Shutterstock-800x430.jpg)
+![Tree IRL](https://pseudoramble.com/assets/images/Ash_Tree_-_geograph.org.uk_-_590710.jpg)
 
 Those are cool. But I think search trees are cool. Kinda like this instead.
 
