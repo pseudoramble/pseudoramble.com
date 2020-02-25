@@ -118,6 +118,8 @@ nav.index a {
     flex: 3 1 80%;
     -webkit-order: 2;
     order: 2;
+    max-width: 1024px;
+    margin: 0 auto;
 }
 
 #main > nav {
@@ -190,7 +192,7 @@ nav.index a {
 
 @media all and (max-width: 768px) {
     body {
-        font-size: 90%;
+        /* font-size: 90%; */
     }
     
     #main, #page {
